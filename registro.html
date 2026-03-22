@@ -123,7 +123,7 @@
                     </p>
                 </div>
                 <!-- Registration Form -->
-                <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <form action="validacion_registro.php" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Full Name -->
                     <div class="space-y-2">
                         <label class="block text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Full
@@ -132,9 +132,9 @@
                             <span
                                 class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60 text-xl"
                                 data-icon="person">person</span>
-                            <input
+                            <input name="username"
                                 class="w-full bg-surface-container-lowest/50 border border-primary/20 rounded-lg py-3 pl-12 pr-4 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-slate-600 outline-none"
-                                placeholder="John Doe" type="text" />
+                                placeholder="John Doe" type="text" required />
                         </div>
                     </div>
                     <!-- Cédula (ID) -->
@@ -145,9 +145,9 @@
                             <span
                                 class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60 text-xl"
                                 data-icon="badge">badge</span>
-                            <input
+                            <input name="cedula"
                                 class="w-full bg-surface-container-lowest/50 border border-primary/20 rounded-lg py-3 pl-12 pr-4 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-slate-600 outline-none"
-                                placeholder="0-0000-0000" type="text" />
+                                placeholder="0-0000-0000" type="text" required />
                         </div>
                     </div>
                     <!-- Email -->
@@ -158,9 +158,9 @@
                             <span
                                 class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60 text-xl"
                                 data-icon="mail">mail</span>
-                            <input
+                            <input name="email"
                                 class="w-full bg-surface-container-lowest/50 border border-primary/20 rounded-lg py-3 pl-12 pr-4 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-slate-600 outline-none"
-                                placeholder="johndoe@email.com" type="email" />
+                                placeholder="johndoe@email.com" type="email" required />
                         </div>
                     </div>
                     <!-- Phone -->
@@ -171,9 +171,9 @@
                             <span
                                 class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60 text-xl"
                                 data-icon="call">call</span>
-                            <input
+                            <input name="telefono"
                                 class="w-full bg-surface-container-lowest/50 border border-primary/20 rounded-lg py-3 pl-12 pr-4 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-slate-600 outline-none"
-                                placeholder="+506 0000-0000" type="tel" />
+                                placeholder="+506 0000-0000" type="tel" required />
                         </div>
                     </div>
                     <!-- Password -->
@@ -184,9 +184,9 @@
                             <span
                                 class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60 text-xl"
                                 data-icon="lock">lock</span>
-                            <input
+                            <input name="password"
                                 class="w-full bg-surface-container-lowest/50 border border-primary/20 rounded-lg py-3 pl-12 pr-4 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-slate-600 outline-none"
-                                placeholder="••••••••" type="password" />
+                                placeholder="••••••••" type="password" required />
                         </div>
                     </div>
                     <!-- Confirm Password -->
@@ -197,9 +197,9 @@
                             <span
                                 class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60 text-xl"
                                 data-icon="verified_user">verified_user</span>
-                            <input
+                            <input name="confirm_password"
                                 class="w-full bg-surface-container-lowest/50 border border-primary/20 rounded-lg py-3 pl-12 pr-4 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-slate-600 outline-none"
-                                placeholder="••••••••" type="password" />
+                                placeholder="••••••••" type="password" required />
                         </div>
                     </div>
                     <!-- Submit Button -->
@@ -214,7 +214,7 @@
                     <div class="md:col-span-2 text-center pt-2">
                         <p class="text-on-surface-variant text-sm">
                             Already have an account?
-                            <a class="text-primary font-bold hover:underline transition-all ml-1" href="#">Sign In</a>
+                            <a class="text-primary font-bold hover:underline transition-all ml-1" href="login.html">Sign In</a>
                         </p>
                     </div>
                 </form>

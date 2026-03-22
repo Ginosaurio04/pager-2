@@ -61,13 +61,13 @@
 <p class="text-primary/70 text-sm mt-2 font-medium">Professional Court Solutions</p>
 </div>
 <!-- Login Form -->
-<form class="space-y-6">
+<form action="validacion_login.php" method="POST" class="space-y-6">
 <!-- Username/Email Field -->
 <div class="space-y-2">
 <label class="text-sm font-semibold text-slate-300 ml-1">Email or Username</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 text-xl">person</span>
-<input class="w-full bg-background-dark/50 border border-primary/20 rounded-lg py-4 pl-12 pr-4 text-white placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-all outline-none" placeholder="Enter your credentials" type="text"/>
+<input name="username" class="w-full bg-background-dark/50 border border-primary/20 rounded-lg py-4 pl-12 pr-4 text-white placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-all outline-none" placeholder="Enter your credentials" type="text" required/>
 </div>
 </div>
 <!-- Password Field -->
@@ -75,7 +75,7 @@
 <label class="text-sm font-semibold text-slate-300 ml-1">Password</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 text-xl">lock</span>
-<input class="w-full bg-background-dark/50 border border-primary/20 rounded-lg py-4 pl-12 pr-12 text-white placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-all outline-none" placeholder="••••••••" type="password"/>
+<input name="password" class="w-full bg-background-dark/50 border border-primary/20 rounded-lg py-4 pl-12 pr-12 text-white placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-all outline-none" placeholder="••••••••" type="password" required/>
 <button class="absolute right-4 top-1/2 -translate-y-1/2 text-primary/60 hover:text-primary" type="button">
 <span class="material-symbols-outlined text-xl">visibility</span>
 </button>
@@ -101,7 +101,7 @@
 <div class="mt-10 pt-6 border-t border-primary/10 text-center">
 <p class="text-slate-400 text-sm">
                     Don't have an account? 
-                    <a class="text-primary font-bold hover:underline" href="#">Contact Administrator</a>
+                    <a class="text-primary font-bold hover:underline" href="registro.html">Create Account</a>
 </p>
 </div>
 </div>
