@@ -16,17 +16,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $datos['password'])) {
             $_SESSION['user_id'] = $datos['id'];
             $_SESSION['username'] = $datos['username'];
-            header("Location: menu.html");
+            header("Location: index.html");
             exit();
         }
         else {
-            echo "Contraseña incorrecta";
+            echo "Contraseña incorrecta. <a href='login.html'>Volver</a>";
         }
     }
     else {
-        echo "Usuario no encontrado";
+        echo "Usuario no encontrado. <a href='login.html'>Volver</a>";
     }
     $stmt->close();
     $conexion->close();
-
 }
+?>

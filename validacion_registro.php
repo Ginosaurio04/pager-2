@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verificar que las contraseñas coincidan
     if ($password !== $confirm_password) {
         echo "<h3>Error: Las contraseñas no coinciden</h3> <a href='registro.html'>Volver al Registro</a>";
+        $conexion->close();
         exit();
     }
 
@@ -29,6 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $stmt->close();
+    $conexion->close();
 }
-$conexion->close();
 ?>
