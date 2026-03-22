@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Usuario no encontrado. <a href='login.html'>Volver</a>";
     }
     $stmt->close();
-    $conexion->close();
+    
 }
+$conexion->close();
 ?>
