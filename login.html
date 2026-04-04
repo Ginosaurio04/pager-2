@@ -8,8 +8,10 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>PadelPro Manager - Inicio de Sesión</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -33,12 +35,52 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(89, 242, 13, 0.15);
         }
-        .toast { position: fixed; top: 2rem; right: 2rem; padding: 1rem 2rem; border-radius: 1rem; color: white; font-weight: 700; transform: translateX(120%); transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999; }
-        .toast.show { transform: translateX(0); }
-        .toast-success { background: #59f20d; color: #0a1208; }
-        .toast-error { background: #ef4444; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
-        .shake { animation: shake 0.4s ease-in-out; }
+
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            color: white;
+            font-weight: 700;
+            transform: translateX(120%);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 9999;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            background: #59f20d;
+            color: #0a1208;
+        }
+
+        .toast-error {
+            background: #ef4444;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
     </style>
 </head>
 
@@ -52,9 +94,9 @@
                 class="size-16 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20 transition-transform group-hover:scale-105 duration-300">
                 <span class="material-symbols-outlined text-background-dark text-4xl">sports_tennis</span>
             </div>
-            <h1 class="text-4xl font-black mt-6 tracking-tight">PadelPro <span class="text-primary italic">Manager</span>
+            <h1 class="text-4xl font-black mt-6 tracking-tight">PadelPro <span
+                    class="text-primary italic">Manager</span>
             </h1>
-            <p class="text-slate-500 mt-2 font-medium opacity-80">Bienvenido de nuevo, Administrador</p>
         </div>
         <!-- Form Container -->
         <div class="glass-card rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden">
@@ -98,7 +140,8 @@
                                 class="peer h-5 w-5 rounded border-primary/30 bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark"
                                 type="checkbox" />
                         </div>
-                        <span class="text-sm text-slate-300 group-hover:text-primary transition-colors">Recordarme</span>
+                        <span
+                            class="text-sm text-slate-300 group-hover:text-primary transition-colors">Recordarme</span>
                     </label>
                     <a class="text-sm font-semibold text-primary hover:text-white transition-colors underline-offset-4 hover:underline"
                         href="#">¿Olvidaste tu contraseña?</a>
@@ -137,7 +180,7 @@
         }
 
         // --- MANEJADOR DE AUTENTICACIÓN AJAX ---
-        document.getElementById('login-form').addEventListener('submit', function(e) {
+        document.getElementById('login-form').addEventListener('submit', function (e) {
             e.preventDefault();
             const card = document.getElementById('login-card');
             const formData = new FormData(this);
@@ -146,20 +189,20 @@
                 method: 'POST',
                 body: formData
             })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    showNotification('¡Acceso concedido! Redirigiendo...', 'success');
-                    setTimeout(() => { window.location.href = data.redirect; }, 1000);
-                } else {
-                    showNotification(data.message, 'error');
-                    card.classList.add('shake');
-                    setTimeout(() => { card.classList.remove('shake'); }, 500);
-                }
-            })
-            .catch(err => {
-                showNotification('Error de conexión con el servidor.', 'error');
-            });
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification('¡Acceso concedido! Redirigiendo...', 'success');
+                        setTimeout(() => { window.location.href = data.redirect; }, 1000);
+                    } else {
+                        showNotification(data.message, 'error');
+                        card.classList.add('shake');
+                        setTimeout(() => { card.classList.remove('shake'); }, 500);
+                    }
+                })
+                .catch(err => {
+                    showNotification('Error de conexión con el servidor.', 'error');
+                });
         });
 
         // --- FUNCIÓN DE VER CONTRASEÑA ---
