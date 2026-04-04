@@ -3,15 +3,39 @@ session_start();
 header('Content-Type: application/json');
 include 'conex.php';
 
-// Access Control: Only Admins can perform lifecycle operations
-if (!isset($_SESSION['rol']) || ($_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Recepcionista')) {
-    echo json_encode(['error' => 'Permisos insuficientes']);
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['error' => 'No autenticado']);
     exit();
 }
+
+$user_id = $_SESSION['user_id'];
+$rol = $_SESSION['rol'] ?? 'Invitado';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id']) && isset($_POST['action'])) {
     $reserva_id = (int)$_POST['id'];
     $action = $_POST['action'];
+
+    $is_admin = ($rol === 'Administrador' || $rol === 'Recepcionista');
+
+    if (!$is_admin) {
+        if ($rol !== 'Jugador' || $action !== 'cancel') {
+            echo json_encode(['error' => 'Permisos insuficientes']);
+            exit();
+        }
+
+        // Verify that the reservation belongs to the Jugador
+        $stmt_check = $conexion->prepare("SELECT usuario_id FROM reservas WHERE id = ?");
+        $stmt_check->bind_param("i", $reserva_id);
+        $stmt_check->execute();
+        $res = $stmt_check->get_result();
+        $reserva_db = $res->fetch_assoc();
+        $stmt_check->close();
+
+        if (!$reserva_db || $reserva_db['usuario_id'] != $user_id) {
+            echo json_encode(['error' => 'No puedes cancelar la reserva de otro usuario']);
+            exit();
+        }
+    }
 
     $nuevo_estado = '';
     if ($action === 'cancel') {

@@ -29,6 +29,8 @@ if ($result) {
             $row['jugador'] = "Cupo Reservado";
         }
 
+        $row['can_cancel'] = ($user_rol === 'Administrador' || $user_rol === 'Recepcionista' || ($user_rol === 'Jugador' && $row['usuario_id'] == $current_user_id));
+
         $row['start_iso'] = $row['fecha'] . 'T' . $row['hora'];
         $row['end_iso'] = $row['fecha'] . 'T' . $row['hora_fin'];
         

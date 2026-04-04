@@ -209,7 +209,7 @@
                             <td class="px-10 py-8 text-xs font-medium">${res.fecha} <span class="opacity-40 ml-2">(${res.hora.substring(0, 5)})</span></td>
                             <td class="px-10 py-8 text-right font-black italic text-xs uppercase tracking-widest ${res.estado === 'Confirmada' ? 'text-primary' : (res.estado === 'Finalizada' ? 'text-slate-500' : 'text-orange-500')}">${res.estado}</td>
                             <td class="px-10 py-8 text-right">
-                                ${data.role !== 'Jugador' && res.estado !== 'Cancelada' && res.estado !== 'Finalizada' ? `
+                                ${res.can_cancel && res.estado !== 'Cancelada' && res.estado !== 'Finalizada' ? `
                                     <button onclick="performAction(${res.id}, 'cancel')" class="bg-red-500/10 text-red-500 px-4 py-2 rounded-lg text-[10px] font-black uppercase hover:bg-red-500 hover:text-white transition-all">Cancelar</button>
                                 ` : '-'}
                             </td>
