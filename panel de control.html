@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>PadelPro Manager Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#59f20d",
+                        "background-light": "#f6f8f5",
+                        "background-dark": "#162210",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-300">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside
+            class="w-64 border-r border-slate-200 dark:border-primary/20 bg-white dark:bg-background-dark hidden lg:flex flex-col">
+            <div class="p-6 flex items-center gap-3 border-b border-slate-200 dark:border-primary/20">
+                <span class="material-symbols-outlined text-primary text-3xl">sports_tennis</span>
+                <h1 class="text-xl font-bold tracking-tight">PadelPro</h1>
+            </div>
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary text-background-dark font-semibold"
+                    href="#">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 transition-colors" href="#">
+                    <span class="material-symbols-outlined">stadium</span>
+                    Courts
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 transition-colors" href="#">
+                    <span class="material-symbols-outlined">group</span>
+                    Users
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 transition-colors" href="#">
+                    <span class="material-symbols-outlined">analytics</span>
+                    Reports
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/10 transition-colors" href="#">
+                    <span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+            </nav>
+            <div class="p-4 border-t border-slate-200 dark:border-primary/20">
+                <div class="flex items-center gap-3 p-2 rounded-lg bg-primary/5">
+                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
+                        <img alt="Admin Profile" data-alt="Close up professional portrait of a manager"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVwYV_R3y7lJDOfV4umTDb3UbKaABvS-aQOWd_d_t_Lqqr9hksKEve3SrGe195G5vD7z8EKQJ9C4SpAUFhOpV9A613VaQsJcX5fMXpUOpnqyEm-Ae2Z0dI6M0w0Lzbp2vQsKfYvwmbZtv8_UTiZy2vO5slPVnaJlK2p0c2Y6MBHQJsanj_n7PRk35HPjai_KnROK_mbjdOznGm-6oewfpQuPKE1JNuaGjQ-MoxpZxpMjg-4LZ5eQALe_QT8hfem56jAgLpOPgggEw" />
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-bold">Admin User</span>
+                        <span class="text-xs opacity-60">Super Admin</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navbar -->
+            <header
+                class="h-16 border-b border-slate-200 dark:border-primary/20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-8 flex items-center justify-between z-10">
+                <div class="flex items-center gap-4 lg:hidden">
+                    <span class="material-symbols-outlined text-2xl">menu</span>
+                    <span class="text-lg font-bold">PadelPro</span>
+                </div>
+                <div class="flex-1 max-w-md hidden md:block">
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                        <input
+                            class="w-full pl-10 pr-4 py-2 rounded-full border border-slate-200 dark:border-primary/20 bg-slate-50 dark:bg-primary/5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-sm transition-all"
+                            placeholder="Search analytics or bookings..." type="text" />
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button
+                        class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-primary/10 transition-colors relative">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span
+                            class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full ring-2 ring-white dark:ring-background-dark"></span>
+                    </button>
+                    <button
+                        class="hidden sm:flex items-center gap-2 bg-primary px-4 py-2 rounded-lg text-background-dark font-bold text-sm shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
+                        <span class="material-symbols-outlined text-base">add_circle</span>
+                        New Booking
+                    </button>
+                </div>
+            </header>
+            <!-- Dashboard Content -->
+            <div class="flex-1 overflow-y-auto p-8">
+                <div class="max-w-7xl mx-auto space-y-8">
+                    <!-- Header Title -->
+                    <div>
+                        <h2 class="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">Admin
+                            Dashboard - PadelPro</h2>
+                        <p class="text-slate-500 dark:text-primary/60 mt-1">Overview of your padel club performance this
+                            month.</p>
+                    </div>
+                    <!-- High Level Metrics -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div
+                            class="bg-white dark:bg-primary/5 p-6 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <span class="text-slate-500 dark:text-primary/60 font-medium">Occupation Rate</span>
+                                <span class="material-symbols-outlined text-primary">groups</span>
+                            </div>
+                            <div class="mt-4 flex items-end justify-between">
+                                <span class="text-4xl font-bold tracking-tight">78%</span>
+                                <span
+                                    class="text-primary flex items-center text-sm font-bold bg-primary/10 px-2 py-1 rounded">
+                                    <span class="material-symbols-outlined text-xs mr-1">trending_up</span>
+                                    +2%
+                                </span>
+                            </div>
+                            <div class="mt-4 w-full bg-slate-100 dark:bg-primary/10 h-2 rounded-full overflow-hidden">
+                                <div class="bg-primary h-full rounded-full" style="width: 78%"></div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-primary/5 p-6 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <span class="text-slate-500 dark:text-primary/60 font-medium">Monthly Gross
+                                    Income</span>
+                                <span class="material-symbols-outlined text-primary">payments</span>
+                            </div>
+                            <div class="mt-4 flex items-end justify-between">
+                                <span class="text-4xl font-bold tracking-tight">$4,200</span>
+                                <span
+                                    class="text-primary flex items-center text-sm font-bold bg-primary/10 px-2 py-1 rounded">
+                                    <span class="material-symbols-outlined text-xs mr-1">trending_up</span>
+                                    +$450
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-400 dark:text-primary/40 mt-4">Last update: 5 minutes ago</p>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-primary/5 p-6 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <span class="text-slate-500 dark:text-primary/60 font-medium">MoM Growth</span>
+                                <span class="material-symbols-outlined text-primary">auto_graph</span>
+                            </div>
+                            <div class="mt-4 flex items-end justify-between">
+                                <span class="text-4xl font-bold tracking-tight">+12%</span>
+                                <span
+                                    class="text-primary flex items-center text-sm font-bold bg-primary/10 px-2 py-1 rounded">
+                                    <span class="material-symbols-outlined text-xs mr-1">trending_up</span>
+                                    +12%
+                                </span>
+                            </div>
+                            <div class="mt-4 flex -space-x-2">
+                                <div
+                                    class="w-8 h-8 rounded-full border-2 border-white dark:border-background-dark bg-slate-300 overflow-hidden">
+                                    <img data-alt="Member avatar"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBffZD-jIPtxHpoJwejskIZenETzPOi46QQqUGO2YF6-dPWu8OmITp7_1q12crDVbiF3w-fOXr7qo2BjkG0TxrzSeVaaEXz3DuJy4nrWnCmhPyCDO_32skiQckWC7jhK5TP7dIc39bd2R6IKu-ahZHOiWS6NOuZQ2Fq-Z3rrvNU3G7g_PBu02wDTVQVwwkOE8JmeG3xT-_CBHVAOxAlPBUxBeYDxDdR7l3FGb_Xz5Lt6BHS3E6xZT-rZ_4Pl5Jhe5ncoXQTWWn-zMI" />
+                                </div>
+                                <div
+                                    class="w-8 h-8 rounded-full border-2 border-white dark:border-background-dark bg-slate-400 overflow-hidden">
+                                    <img data-alt="Member avatar"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfFxrw72J3I3rkkkEgZUI9QCcwiiUDM9TEpGNk-xC6C9QyMfZjhCrOXXACOLZ32ixFaFIbkTl61PxGaeRvM7peBJEgMxdCbtl9RdGeeUG0fJ_SU5NeN6XivsEw2bs7yVgYSw6k5EaaR7XgHv0h5L1cKF8YnMgJ2_1jQZ7ERoBi8PqVaLtmb2xXK5UvfEv8hqCxdcWQkBJlGKi7XP_G8jcDvac-dcOTyQseHhNX23nKXjNouoGDpMJt8SN-GNfibX-AGSC_cu7VVhk" />
+                                </div>
+                                <div
+                                    class="w-8 h-8 rounded-full border-2 border-white dark:border-background-dark bg-slate-500 overflow-hidden">
+                                    <img data-alt="Member avatar"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfilAMn-H7kT3ejK7Z5Tj1DaMsC08jD8RegCa9d7HX1_QJpulZHa7oevowNl8xf9zlkaLinPKLlZZREmAUmBwdNh0fwogJPR3w2WnRmxp0Y9jldFCUZAroK6KATHbvsPZQvY9h3CgpOyWv1K97tPPpsBeXFAzkn6MXSt9NkNnbiS3NlluGqW8Ynm8krNaqQUT6LqPoxHno9fYmocQUnVTZOOXa64F0mNOpjMjGirQLzqKRIw7wuG8PrRFJN7APn9nMR8HpnH1IGZI" />
+                                </div>
+                                <div
+                                    class="w-8 h-8 rounded-full border-2 border-white dark:border-background-dark bg-primary flex items-center justify-center text-[10px] font-bold text-background-dark">
+                                    +8</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Visualizations -->
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                        <!-- Heatmap Container -->
+                        <div
+                            class="bg-white dark:bg-primary/5 p-6 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 class="font-bold text-lg">Court Occupancy Heatmap</h3>
+                                    <p class="text-xs text-slate-500 dark:text-primary/60">Average occupancy by day and
+                                        time</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-primary">Peak: 6PM-9PM</span>
+                                </div>
+                            </div>
+                            <div class="relative overflow-x-auto">
+                                <div class="grid grid-cols-8 gap-1 min-w-[500px]">
+                                    <!-- Header Row -->
+                                    <div class="h-8"></div>
+                                    <div
+                                        class="text-[10px] font-bold text-center uppercase tracking-wider text-slate-400">
+                                        Mon</div>
+                                    <div
+                                        class="text-[10px] font-bold text-center uppercase tracking-wider text-slate-400">
+                                        Tue</div>
+                                    <div
+                                        class="text-[10px] font-bold text-center uppercase tracking-wider text-slate-400">
+                                        Wed</div>
+                                    <div
+                                        class="text-[10px] font-bold text-center uppercase tracking-wider text-slate-400">
+                                        Thu</div>
+                                    <div
+                                        class="text-[10px] font-bold text-center uppercase tracking-wider text-slate-400">
+                                        Fri</div>
+                                    <div
+                                        class="text-[10px] font-bold text-center uppercase tracking-wider text-slate-400">
+                                        Sat</div>
+                                    <div
+                                        class="text-[10px] font-bold text-center uppercase tracking-wider text-slate-400">
+                                        Sun</div>
+                                    <!-- Time Rows -->
+                                    <div class="text-[10px] flex items-center font-bold text-slate-400">08:00</div>
+                                    <div class="bg-primary/10 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/20 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/10 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/10 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/20 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/40 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/40 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="text-[10px] flex items-center font-bold text-slate-400">12:00</div>
+                                    <div class="bg-primary/30 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/30 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/40 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/30 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/40 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/70 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/60 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="text-[10px] flex items-center font-bold text-slate-400">18:00</div>
+                                    <div class="bg-primary/60 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/70 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/60 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/80 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div
+                                        class="bg-primary/100 h-10 rounded-sm hover:ring-2 ring-primary transition-all shadow-[0_0_10px_rgba(89,242,13,0.3)]">
+                                    </div>
+                                    <div
+                                        class="bg-primary/90 h-10 rounded-sm hover:ring-2 ring-primary transition-all shadow-[0_0_10px_rgba(89,242,13,0.3)]">
+                                    </div>
+                                    <div
+                                        class="bg-primary/80 h-10 rounded-sm hover:ring-2 ring-primary transition-all shadow-[0_0_10px_rgba(89,242,13,0.3)]">
+                                    </div>
+                                    <div class="text-[10px] flex items-center font-bold text-slate-400">21:00</div>
+                                    <div class="bg-primary/40 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/40 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/40 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/50 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/70 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/60 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                    <div class="bg-primary/50 h-10 rounded-sm hover:ring-2 ring-primary transition-all">
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="mt-4 flex items-center justify-end gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                <span>Low</span>
+                                <div class="flex gap-1">
+                                    <div class="w-3 h-3 bg-primary/10 rounded-sm"></div>
+                                    <div class="w-3 h-3 bg-primary/40 rounded-sm"></div>
+                                    <div class="w-3 h-3 bg-primary/70 rounded-sm"></div>
+                                    <div class="w-3 h-3 bg-primary/100 rounded-sm"></div>
+                                </div>
+                                <span>High</span>
+                            </div>
+                        </div>
+                        <!-- Payment Method Breakdown -->
+                        <div
+                            class="bg-white dark:bg-primary/5 p-6 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm flex flex-col">
+                            <div class="flex items-center justify-between mb-8">
+                                <div>
+                                    <h3 class="font-bold text-lg">Payment Method Breakdown</h3>
+                                    <p class="text-xs text-slate-500 dark:text-primary/60">Distribution of revenue
+                                        sources</p>
+                                </div>
+                                <span class="text-xl font-bold">$4,200 Total</span>
+                            </div>
+                            <div class="flex flex-1 items-center justify-around flex-wrap gap-8">
+                                <!-- Circular Pie Chart (Simulated) -->
+                                <div
+                                    class="relative w-48 h-48 rounded-full border-[16px] border-primary/10 flex items-center justify-center">
+                                    <!-- Zelle segment (50%) -->
+                                    <div
+                                        class="absolute inset-0 rounded-full border-[16px] border-primary border-t-transparent border-r-transparent rotate-45">
+                                    </div>
+                                    <!-- Pago Movil (30%) -->
+                                    <div
+                                        class="absolute inset-0 rounded-full border-[16px] border-primary/60 border-b-transparent border-l-transparent -rotate-12">
+                                    </div>
+                                    <!-- Cash (20%) -->
+                                    <div
+                                        class="absolute inset-0 rounded-full border-[16px] border-primary/30 border-t-transparent border-l-transparent rotate-[160deg]">
+                                    </div>
+                                    <div class="text-center">
+                                        <span class="text-2xl font-black">100%</span>
+                                        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-tighter">
+                                            Verified</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-4 min-w-[140px]">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-3 h-3 rounded-full bg-primary"></div>
+                                            <span class="text-sm font-medium">Zelle</span>
+                                        </div>
+                                        <span class="font-bold text-sm">50%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-3 h-3 rounded-full bg-primary/60"></div>
+                                            <span class="text-sm font-medium">Pago Móvil</span>
+                                        </div>
+                                        <span class="font-bold text-sm">30%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-3 h-3 rounded-full bg-primary/30"></div>
+                                            <span class="text-sm font-medium">Cash</span>
+                                        </div>
+                                        <span class="font-bold text-sm">20%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Recent Activity/List -->
+                    <div
+                        class="bg-white dark:bg-primary/5 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm overflow-hidden">
+                        <div
+                            class="p-6 border-b border-slate-200 dark:border-primary/20 flex items-center justify-between">
+                            <h3 class="font-bold text-lg">Upcoming Bookings</h3>
+                            <button class="text-primary text-sm font-bold hover:underline">View All</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-slate-50 dark:bg-primary/10 text-xs font-bold uppercase tracking-wider text-slate-400">
+                                    <tr>
+                                        <th class="px-6 py-4">Player</th>
+                                        <th class="px-6 py-4">Court</th>
+                                        <th class="px-6 py-4">Time</th>
+                                        <th class="px-6 py-4">Status</th>
+                                        <th class="px-6 py-4 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 dark:divide-primary/10">
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-primary/5 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-xs">
+                                                    RM</div>
+                                                <span class="text-sm font-medium">Ricardo Mendoza</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm font-medium">Court #3 (Panoramic)</td>
+                                        <td class="px-6 py-4 text-sm text-slate-500 dark:text-primary/60">Today, 18:30 -
+                                            20:00</td>
+                                        <td class="px-6 py-4">
+                                            <span
+                                                class="px-2 py-1 rounded text-[10px] font-black uppercase bg-primary/20 text-primary ring-1 ring-primary/40">Confirmed</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <button
+                                                class="material-symbols-outlined text-slate-400 hover:text-primary">more_vert</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-primary/5 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-xs">
+                                                    AG</div>
+                                                <span class="text-sm font-medium">Ana Garcia</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm font-medium">Court #1 (Main)</td>
+                                        <td class="px-6 py-4 text-sm text-slate-500 dark:text-primary/60">Today, 19:00 -
+                                            20:30</td>
+                                        <td class="px-6 py-4">
+                                            <span
+                                                class="px-2 py-1 rounded text-[10px] font-black uppercase bg-primary/20 text-primary ring-1 ring-primary/40">Confirmed</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <button
+                                                class="material-symbols-outlined text-slate-400 hover:text-primary">more_vert</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-primary/5 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-xs">
+                                                    JP</div>
+                                                <span class="text-sm font-medium">Juan Perez</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm font-medium">Court #2</td>
+                                        <td class="px-6 py-4 text-sm text-slate-500 dark:text-primary/60">Today, 20:00 -
+                                            21:30</td>
+                                        <td class="px-6 py-4">
+                                            <span
+                                                class="px-2 py-1 rounded text-[10px] font-black uppercase bg-slate-100 dark:bg-primary/10 text-slate-400 ring-1 ring-slate-200 dark:ring-primary/20">Pending</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <button
+                                                class="material-symbols-outlined text-slate-400 hover:text-primary">more_vert</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

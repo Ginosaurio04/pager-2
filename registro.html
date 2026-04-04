@@ -5,11 +5,9 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>PadelPro Manager - Create Account</title>
+    <title>PadelPro Manager - Admin Registration</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap"
         rel="stylesheet" />
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
@@ -20,111 +18,73 @@
             theme: {
                 extend: {
                     colors: {
-                        "on-secondary": "#0e3900",
-                        "tertiary": "#ffebf1",
-                        "on-secondary-fixed-variant": "#185200",
-                        "surface-bright": "#333c2d",
-                        "on-background": "#f1f5f9",
-                        "on-primary": "#162210",
-                        "on-secondary-fixed": "#062100",
-                        "primary-fixed": "#7cff48",
-                        "secondary-container": "#297d00",
-                        "inverse-on-surface": "#2a3325",
-                        "on-secondary-container": "#caffae",
-                        "on-tertiary-fixed-variant": "#64394e",
-                        "primary-container": "#59f20d",
-                        "outline-variant": "#3d4b35",
-                        "secondary": "#83dc5e",
-                        "primary-fixed-dim": "#50e300",
-                        "on-tertiary": "#4b2338",
-                        "inverse-surface": "#dce6d1",
-                        "on-error": "#690005",
-                        "surface-dim": "#0d1609",
-                        "surface-container-low": "#151e11",
-                        "tertiary-container": "#ffc3dd",
-                        "on-surface-variant": "#cbd5e1",
-                        "on-primary-container": "#0e3900",
-                        "surface-tint": "#50e300",
-                        "on-tertiary-fixed": "#320e22",
-                        "error": "#ffb4ab",
-                        "secondary-fixed": "#9ef977",
-                        "surface": "#162210",
-                        "on-primary-fixed": "#062100",
-                        "on-tertiary-container": "#7b4d63",
-                        "surface-container-highest": "#2e3729",
-                        "on-surface": "#f1f5f9",
-                        "surface-variant": "#2e3729",
-                        "tertiary-fixed": "#ffd8e7",
                         "primary": "#59f20d",
-                        "surface-container": "#162210",
-                        "inverse-primary": "#236d00",
-                        "outline": "#59f20d",
-                        "on-error-container": "#ffdad6",
-                        "secondary-fixed-dim": "#83dc5e",
-                        "background": "#162210",
-                        "surface-container-high": "#242d1e",
-                        "surface-container-lowest": "#081005",
-                        "error-container": "#93000a",
-                        "on-primary-fixed-variant": "#185200",
-                        "tertiary-fixed-dim": "#f1b6d0"
+                        "on-primary": "#162210",
+                        "surface": "#162210",
+                        "on-surface": "#f6f8f5",
+                        "on-surface-variant": "#94a3b8",
+                        "surface-container-lowest": "#0a1106",
+                        "surface-container-low": "#121d0d",
+                        "outline": "#334155",
                     },
                     fontFamily: {
-                        "headline": ["Lexend"],
-                        "body": ["Lexend"],
-                        "label": ["Lexend"]
+                        "display": ["Lexend"],
+                        "headline": ["Lexend"]
                     },
-                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px" },
                 },
             },
         }
     </script>
     <style>
-        .glass-panel {
-            background: rgba(22, 34, 16, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(89, 242, 13, 0.1);
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(89, 242, 13, 0.1);
         }
 
         .neon-glow:focus-within {
-            box-shadow: 0 0 15px rgba(89, 242, 13, 0.2);
-        }
-
-        /* Etiquetas del formulario de registro en blanco */
-        form label {
-            color: #ffffff !important;
-        }
-
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            box-shadow: 0 0 25px rgba(89, 242, 13, 0.2);
         }
     </style>
 </head>
 
-<body class="bg-background text-on-background font-body min-h-screen selection:bg-primary selection:text-on-primary">
-    <!-- Suppressed Navigation Shell as per Linear/Transactional Rule -->
-    <main class="relative min-h-screen flex items-center justify-center p-4 md:p-8 overflow-hidden">
-        <!-- Background Image with Environmental Depth -->
-        <div class="absolute inset-0 z-0">
-            <img alt="Padel court at night with bright stadium lighting" class="w-full h-full object-cover opacity-40"
-                data-alt="Professional padel court at night with green neon lights"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgzE7N5cvfTuKBalyDH5WU8d_TqmicxgzbuGPeENANbopKvJvMLcRuR7aWtNiwzi13lUJnpspWpOi3_pQjqVNcTapOTYVydw4w7TWge1y7wNueOdCe3GHsXTN4juIbrXXvb71F_XLs6_i4l6ttBh9W58FRkTqmEBSmlGYThOtcSscIiXrwxLFEThqBwfZDPUTD56jjxvRxC6JP1eWkuQWZ6m2ZVRcHL6xwjKNWmbg6gNsnDQfrIBBCL47SrgBpoYb-y2FSK9zklyQ" />
-            <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
-        </div>
-        <!-- Registration Container -->
-        <div class="relative z-10 w-full max-w-2xl">
-            <div class="glass-panel p-8 md:p-12 rounded-xl shadow-lg shadow-primary/10">
-                <!-- Header Section -->
-                <div class="mb-10 text-center">
+<body
+    class="bg-surface text-on-surface font-display min-h-screen flex items-center justify-center p-6 selection:bg-primary/30 selection:text-primary">
+    <!-- Main Registration Shell -->
+    <div class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Left Side: Brand & Value Prop (Collapses on small screens) -->
+        <div class="lg:col-span-12 flex flex-col items-center">
+            <!-- Glassmorphism Card -->
+            <div
+                class="w-full bg-surface-container-low/40 border border-primary/10 rounded-[2.5rem] p-8 lg:p-12 shadow-2xl backdrop-blur-3xl relative overflow-hidden">
+                <!-- Branding Header -->
+                <div class="flex flex-col items-center text-center mb-12">
                     <div
-                        class="inline-flex items-center justify-center p-3 mb-6 bg-primary/10 rounded-xl border border-primary/20">
-                        <span class="material-symbols-outlined text-primary text-3xl"
-                            data-icon="sports_tennis">sports_tennis</span>
+                        class="size-20 bg-primary rounded-3xl flex items-center justify-center shadow-lg shadow-primary/25 mb-6 group transition-all duration-500 hover:rotate-12">
+                        <span
+                            class="material-symbols-outlined text-on-primary text-5xl transition-transform group-hover:scale-110">sports_tennis</span>
                     </div>
-                    <h1 class="font-headline text-3xl md:text-4xl font-black text-on-background tracking-tight mb-3">
-                        Create your Player Profile
+                    <h1 class="text-4xl lg:text-5xl font-black tracking-tighter mb-4">
+                        Join <span class="text-primary italic">PadelPro</span>
                     </h1>
-                    <p class="text-on-surface-variant text-sm md:text-base max-w-md mx-auto">
-                        Join the PadelPro community and start booking courts in seconds.
+                    <p class="text-on-surface-variant font-medium max-w-md mx-auto leading-relaxed">
+                        Become part of the elite network of club managers. Experience professional administrative tools
+                        at your fingertips.
                     </p>
                 </div>
                 <!-- Registration Form -->
@@ -226,17 +186,11 @@
             </div>
             <!-- Minimal Brand Anchor -->
             <div class="mt-8 text-center flex items-center justify-center gap-2">
-                <span class="w-8 h-[1px] bg-primary/20"></span>
-                <span class="font-headline font-black uppercase text-primary tracking-widest text-xs">PadelPro
-                    Manager</span>
-                <span class="w-8 h-[1px] bg-primary/20"></span>
+                <span class="text-on-surface-variant/40 font-bold text-xs uppercase tracking-widest">© 2023
+                    PadelPro Management Systems</span>
             </div>
         </div>
-        <!-- Decorative Elements -->
-        <div class="fixed top-20 -left-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div class="fixed bottom-20 -right-20 w-80 h-80 bg-primary/5 rounded-full blur-[120px] pointer-events-none">
-        </div>
-    </main>
+    </div>
 </body>
 
 </html>

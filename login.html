@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>PadelPro Manager - Admin Login</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -18,103 +23,102 @@
                         "background-dark": "#162210",
                     },
                     fontFamily: {
-                        "display": ["Lexend", "sans-serif"]
+                        "display": ["Lexend"]
                     },
-                    borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
                 },
             },
         }
     </script>
-<style>
-        body {
-            font-family: 'Lexend', sans-serif;
-        }
-        input:focus {
-            box-shadow: 0 0 0 2px rgba(89, 242, 13, 0.2);
-        }
-        .glass-panel {
-            background: rgba(22, 34, 16, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(89, 242, 13, 0.1);
-        }
-    </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
-<!-- Background Image Overlay -->
-<div class="fixed inset-0 z-0 opacity-40">
-<div class="w-full h-full bg-cover bg-center" data-alt="High-end professional padel court at night with bright lights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAhlbKgRcFh6ccqLRaYWIFAb5XH25-dMTPHturYE4SzMBNT5FeWzMGyz_vHpGH9u4oFyTsMGPCKxxfmnHvX-tfTdh3HsfKkauU3AaCKJMpsnjAVpyO6iXtCzFnq_447iaKGhKT0Bd6ytQCqksS_orBSy9-sv8I5k2r2ibMNZYq7sRqO2QCYlNjZKSGQLmJgYkZcssQU6ywRaQ0l2ATBCJlrn_8vzfBAQd2OAN4LVv0MM3P4K0hUoiF3oU3UrXtlgjr55s2Jhmo_Q6s')"></div>
-<div class="absolute inset-0 bg-gradient-to-b from-background-dark/80 via-background-dark/60 to-background-dark"></div>
-</div>
-<main class="relative z-10 w-full max-w-md">
-<div class="glass-panel rounded-xl p-8 shadow-2xl">
-<!-- Logo & Header -->
-<div class="flex flex-col items-center mb-10">
-<div class="bg-primary/20 p-3 rounded-full mb-4">
-<span class="material-symbols-outlined text-primary text-4xl">sports_tennis</span>
-</div>
-<h1 class="text-3xl font-black tracking-tight text-white">PadelPro <span class="text-primary">Manager</span></h1>
-<p class="text-primary/70 text-sm mt-2 font-medium">Professional Court Solutions</p>
-</div>
-<!-- Login Form -->
-<form action="validacion_login.php" method="POST" class="space-y-6">
-<!-- Username/Email Field -->
-<div class="space-y-2">
-<label class="text-sm font-semibold text-slate-300 ml-1">Email or Username</label>
-<div class="relative">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 text-xl">person</span>
-<input name="username" class="w-full bg-background-dark/50 border border-primary/20 rounded-lg py-4 pl-12 pr-4 text-white placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-all outline-none" placeholder="Enter your credentials" type="text" required/>
-</div>
-</div>
-<!-- Password Field -->
-<div class="space-y-2">
-<label class="text-sm font-semibold text-slate-300 ml-1">Password</label>
-<div class="relative">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 text-xl">lock</span>
-<input name="password" class="w-full bg-background-dark/50 border border-primary/20 rounded-lg py-4 pl-12 pr-12 text-white placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-all outline-none" placeholder="••••••••" type="password" required/>
-<button class="absolute right-4 top-1/2 -translate-y-1/2 text-primary/60 hover:text-primary" type="button">
-<span class="material-symbols-outlined text-xl">visibility</span>
-</button>
-</div>
-</div>
-<!-- Utilities -->
-<div class="flex items-center justify-between py-2">
-<label class="flex items-center gap-2 cursor-pointer group">
-<div class="relative flex items-center">
-<input class="peer h-5 w-5 rounded border-primary/30 bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" type="checkbox"/>
-</div>
-<span class="text-sm text-slate-300 group-hover:text-primary transition-colors">Remember Me</span>
-</label>
-<a class="text-sm font-semibold text-primary hover:text-white transition-colors underline-offset-4 hover:underline" href="#">Forgot Password?</a>
-</div>
-<!-- Submit Button -->
-<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 group" type="submit">
-<span>Sign In</span>
-<span class="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1">arrow_forward</span>
-</button>
-</form>
-<!-- Footer Section -->
-<div class="mt-10 pt-6 border-t border-primary/10 text-center">
-<p class="text-slate-400 text-sm">
-                    Don't have an account? 
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display flex items-center justify-center min-h-screen p-6 transition-colors duration-300">
+    <!-- Main Login Card Container -->
+    <div class="w-full max-w-lg">
+        <!-- Brand/Logo Section -->
+        <div class="flex flex-col items-center mb-10 group">
+            <div
+                class="size-16 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20 transition-transform group-hover:scale-105 duration-300">
+                <span class="material-symbols-outlined text-background-dark text-4xl">sports_tennis</span>
+            </div>
+            <h1 class="text-4xl font-black mt-6 tracking-tight">PadelPro <span class="text-primary italic">Manager</span>
+            </h1>
+            <p class="text-slate-500 mt-2 font-medium opacity-80">Welcome back, Administrator</p>
+        </div>
+        <!-- Form Container -->
+        <div
+            class="bg-white dark:bg-primary/5 rounded-[2rem] border border-slate-200 dark:border-primary/20 p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+            <!-- Decorative Glow -->
+            <div
+                class="absolute -top-24 -right-24 size-48 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all">
+            </div>
+            <!-- Login Form -->
+            <form action="validacion_login.php" method="POST" class="space-y-6">
+                <!-- Username/Email Field -->
+                <div class="space-y-2">
+                    <label class="text-sm font-semibold text-slate-300 ml-1">Email or Username</label>
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 text-xl">person</span>
+                        <input name="username"
+                            class="w-full bg-background-dark/50 border border-primary/20 rounded-lg py-4 pl-12 pr-4 text-white placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-all outline-none"
+                            placeholder="Enter your credentials" type="text" required />
+                    </div>
+                </div>
+                <!-- Password Field -->
+                <div class="space-y-2">
+                    <label class="text-sm font-semibold text-slate-300 ml-1">Password</label>
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 text-xl">lock</span>
+                        <input name="password"
+                            class="w-full bg-background-dark/50 border border-primary/20 rounded-lg py-4 pl-12 pr-12 text-white placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-all outline-none"
+                            placeholder="••••••••" type="password" required />
+                        <button class="absolute right-4 top-1/2 -translate-y-1/2 text-primary/60 hover:text-primary"
+                            type="button">
+                            <span class="material-symbols-outlined text-xl">visibility</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Utilities -->
+                <div class="flex items-center justify-between py-2">
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <div class="relative flex items-center">
+                            <input
+                                class="peer h-5 w-5 rounded border-primary/30 bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark"
+                                type="checkbox" />
+                        </div>
+                        <span class="text-sm text-slate-300 group-hover:text-primary transition-colors">Remember
+                            Me</span>
+                    </label>
+                    <a class="text-sm font-semibold text-primary hover:text-white transition-colors underline-offset-4 hover:underline"
+                        href="#">Forgot Password?</a>
+                </div>
+                <!-- Submit Button -->
+                <button
+                    class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 group"
+                    type="submit">
+                    <span>Sign In</span>
+                    <span
+                        class="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1">arrow_forward</span>
+                </button>
+            </form>
+            <!-- Footer Section -->
+            <div class="mt-10 pt-6 border-t border-primary/10 text-center">
+                <p class="text-slate-400 text-sm">
+                    Don't have an account?
                     <a class="text-primary font-bold hover:underline" href="registro.html">Create Account</a>
-</p>
-</div>
-</div>
-<!-- System Status Tags -->
-<div class="mt-8 flex justify-center gap-6">
-<div class="flex items-center gap-2 text-xs text-slate-500 bg-background-dark/40 px-3 py-1.5 rounded-full border border-primary/5">
-<span class="flex h-2 w-2 rounded-full bg-primary"></span>
-<span>System Online</span>
-</div>
-<div class="flex items-center gap-2 text-xs text-slate-500 bg-background-dark/40 px-3 py-1.5 rounded-full border border-primary/5">
-<span class="material-symbols-outlined text-[14px]">encrypted</span>
-<span>Secure Connection</span>
-</div>
-</div>
-</main>
-</body></html>
+                </p>
+            </div>
+        </div>
+        <!-- Support Links -->
+        <div class="mt-8 flex justify-center gap-6 text-xs font-bold uppercase tracking-widest text-slate-500">
+            <a class="hover:text-primary transition-colors" href="#">Help Center</a>
+            <a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+            <a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+        </div>
+    </div>
+</body>
+
+</html>

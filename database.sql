@@ -12,3 +12,15 @@ CREATE TABLE IF NOT EXISTS usuarios (
     password VARCHAR(255) NOT NULL,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Crear la tabla de reservas
+CREATE TABLE IF NOT EXISTS reservas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NULL,
+    player_name VARCHAR(100) NULL,
+    court VARCHAR(50) NOT NULL,
+    booking_day VARCHAR(20) NOT NULL,
+    booking_time VARCHAR(20) NOT NULL,
+    fecha_reserva TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);

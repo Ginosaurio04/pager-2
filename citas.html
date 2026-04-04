@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#59f20d",
+                        "background-light": "#f6f8f5",
+                        "background-dark": "#162210",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <title>PadelPro Manager - Reservation Management</title>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar Navigation -->
+        <aside
+            class="w-64 border-r border-slate-200 dark:border-primary/20 bg-white dark:bg-background-dark flex flex-col">
+            <div class="p-6 flex items-center gap-3">
+                <div class="text-primary">
+                    <span class="material-symbols-outlined text-3xl">star</span>
+                </div>
+                <h2 class="text-xl font-bold tracking-tight">PadelPro</h2>
+            </div>
+            <nav class="flex-1 px-4 space-y-1">
+                <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="font-medium text-sm">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary text-background-dark transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    <span class="font-medium text-sm">Reservations</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">payments</span>
+                    <span class="font-medium text-sm">Payments</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">group</span>
+                    <span class="font-medium text-sm">Customers</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span class="font-medium text-sm">Settings</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-slate-200 dark:border-primary/10">
+                <div class="bg-primary/5 rounded-xl p-4">
+                    <p class="text-xs font-bold uppercase tracking-wider text-primary mb-3">Quick Walk-in</p>
+                    <form action="validacion_citas.php" method="POST" class="space-y-3">
+                        <div class="relative">
+                            <input name="player_name" type="text" placeholder="Player Name" class="w-full bg-background-light dark:bg-background-dark/50 border border-primary/20 rounded-lg py-2 px-3 text-sm focus:ring-1 focus:ring-primary outline-none" required>
+                        </div>
+                        <select name="court" class="w-full bg-background-light dark:bg-background-dark/50 border border-primary/20 rounded-lg py-2 px-3 text-sm focus:ring-1 focus:ring-primary outline-none">
+                            <option value="Court 1">Court 1</option>
+                            <option value="Court 2">Court 2</option>
+                            <option value="Court 3">Court 3 (VIP)</option>
+                        </select>
+                        <button type="submit"
+                            class="w-full flex items-center justify-center gap-2 bg-primary text-background-dark py-2 rounded-lg text-sm font-bold hover:scale-[1.02] transition-transform">
+                            <span class="material-symbols-outlined text-sm">add_circle</span>
+                            Confirm Walk-in
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </aside>
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header
+                class="h-16 border-b border-slate-200 dark:border-primary/20 flex items-center justify-between px-8 bg-white dark:bg-background-dark/50">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-xl font-bold">Reservation Management</h1>
+                    <div class="flex bg-slate-100 dark:bg-primary/10 p-1 rounded-lg ml-4">
+                        <button
+                            class="px-4 py-1.5 rounded-md text-sm font-bold bg-white dark:bg-primary text-background-dark shadow-sm">Daily
+                            View</button>
+                        <button
+                            class="px-4 py-1.5 rounded-md text-sm font-bold text-slate-500 dark:text-slate-400">Weekly
+                            View</button>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <span
+                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                        <input
+                            class="bg-slate-100 dark:bg-primary/5 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary w-64"
+                            placeholder="Search reservations..." type="text" />
+                    </div>
+                    <button class="p-2 text-slate-500 dark:text-slate-400 hover:bg-primary/10 rounded-full relative">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span
+                            class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-background-dark"></span>
+                    </button>
+                    <div
+                        class="size-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/50 overflow-hidden">
+                        <img alt="User" class="size-full object-cover"
+                            data-alt="Avatar profile picture of the receptionist"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmYm1Q6pruew-D9EZXEl4_Zpj6nka2C0N7kXZBwSL3J9OzgQ9jcwOr16tnIhlHCxhI38WMImy6CxYx8ImsKvSe1CKOEc-vI8Pf9cKsc7ULfM2ztDxKXEaqiRt2CThAdXY5sOmBglbgUydnD4ofYS9Q6tyxz0OjgtRU0C6p6sU3Cde5J1Rn5qLMcQfP_Bv41NHE6NeC_H3PDOvjvHRWa1xG3Z7xgRt-V0UR3TLaZBtAnIyqYYSfYeW-TPp4eR2n5gp3VZhHUtisV4" />
+                    </div>
+                </div>
+            </header>
+            <!-- Calendar Toolbar -->
+            <div class="p-6 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <button
+                            class="size-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-primary/20 hover:bg-primary/10 transition-colors">
+                            <span class="material-symbols-outlined">chevron_left</span>
+                        </button>
+                        <span class="text-lg font-bold">Thursday, Oct 12, 2023</span>
+                        <button
+                            class="size-8 flex items-center justify-center rounded-lg border border-slate-200 dark:border-primary/20 hover:bg-primary/10 transition-colors">
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </button>
+                    </div>
+                    <button
+                        class="text-sm font-bold text-primary px-4 py-1.5 rounded-lg border border-primary/30 hover:bg-primary/10">Today</button>
+                </div>
+                <div class="flex gap-6">
+                    <div class="flex items-center gap-2">
+                        <span class="size-3 rounded-full bg-primary"></span>
+                        <span class="text-xs font-medium opacity-70">Confirmed</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="size-3 rounded-full bg-orange-500"></span>
+                        <span class="text-xs font-medium opacity-70">Pending</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="size-3 rounded-full bg-red-500"></span>
+                        <span class="text-xs font-medium opacity-70">Cancelled</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Calendar Grid -->
+            <div class="flex-1 overflow-auto px-6 pb-6">
+                <div
+                    class="min-w-[1200px] bg-white dark:bg-primary/5 rounded-xl border border-slate-200 dark:border-primary/20">
+                    <!-- Grid Header (Courts) -->
+                    <div
+                        class="grid grid-cols-[100px_repeat(8,1fr)] border-b border-slate-200 dark:border-primary/20 sticky top-0 bg-white dark:bg-background-dark z-10">
+                        <div
+                            class="p-4 border-r border-slate-200 dark:border-primary/20 flex items-center justify-center">
+                            <span class="material-symbols-outlined opacity-40">schedule</span>
+                        </div>
+                        <div class="p-4 border-r border-slate-200 dark:border-primary/20 text-center font-bold text-sm">
+                            Court 1</div>
+                        <div class="p-4 border-r border-slate-200 dark:border-primary/20 text-center font-bold text-sm">
+                            Court 2</div>
+                        <div class="p-4 border-r border-slate-200 dark:border-primary/20 text-center font-bold text-sm">
+                            Court 3 (VIP)</div>
+                        <div class="p-4 border-r border-slate-200 dark:border-primary/20 text-center font-bold text-sm">
+                            Court 4</div>
+                        <div class="p-4 border-r border-slate-200 dark:border-primary/20 text-center font-bold text-sm">
+                            Court 5</div>
+                        <div class="p-4 border-r border-slate-200 dark:border-primary/20 text-center font-bold text-sm">
+                            Court 6</div>
+                        <div class="p-4 border-r border-slate-200 dark:border-primary/20 text-center font-bold text-sm">
+                            Court 7</div>
+                        <div class="p-4 text-center font-bold text-sm">Court 8</div>
+                    </div>
+                    <!-- Grid Rows (90-minute blocks) -->
+                    <div class="divide-y divide-slate-200 dark:divide-primary/20">
+                        <!-- 06:00 AM -->
+                        <div class="grid grid-cols-[100px_repeat(8,1fr)] h-24 group">
+                            <div
+                                class="p-4 border-r border-slate-200 dark:border-primary/20 flex flex-col items-center justify-center">
+                                <span class="text-sm font-bold">06:00</span>
+                                <span class="text-[10px] opacity-40 uppercase">AM</span>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20 relative">
+                                <!-- Reserved Block -->
+                                <div
+                                    class="h-full w-full bg-primary/20 border-l-4 border-primary rounded-md p-2 overflow-hidden cursor-pointer hover:bg-primary/30 transition-all">
+                                    <p class="text-[10px] font-bold text-primary uppercase leading-none mb-1">Confirmed
+                                    </p>
+                                    <p class="text-xs font-bold leading-tight truncate">Smith / Garcia</p>
+                                    <p class="text-[10px] opacity-70">Paid</p>
+                                </div>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20 relative">
+                                <div
+                                    class="h-full w-full bg-orange-500/20 border-l-4 border-orange-500 rounded-md p-2 overflow-hidden cursor-pointer hover:bg-orange-500/30 transition-all">
+                                    <p class="text-[10px] font-bold text-orange-500 uppercase leading-none mb-1">Pending
+                                    </p>
+                                    <p class="text-xs font-bold leading-tight truncate">VIP Training</p>
+                                    <p class="text-[10px] opacity-70">Unpaid</p>
+                                </div>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1"></div>
+                        </div>
+                        <!-- 07:30 AM -->
+                        <div class="grid grid-cols-[100px_repeat(8,1fr)] h-24">
+                            <div
+                                class="p-4 border-r border-slate-200 dark:border-primary/20 flex flex-col items-center justify-center">
+                                <span class="text-sm font-bold">07:30</span>
+                                <span class="text-[10px] opacity-40 uppercase">AM</span>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20 relative">
+                                <div
+                                    class="h-full w-full bg-primary/20 border-l-4 border-primary rounded-md p-2 overflow-hidden cursor-pointer hover:bg-primary/30 transition-all">
+                                    <p class="text-[10px] font-bold text-primary uppercase leading-none mb-1">Confirmed
+                                    </p>
+                                    <p class="text-xs font-bold leading-tight truncate">Johnson Group</p>
+                                    <p class="text-[10px] opacity-70">Membership</p>
+                                </div>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20 relative">
+                                <div
+                                    class="h-full w-full bg-red-500/20 border-l-4 border-red-500 rounded-md p-2 overflow-hidden opacity-50">
+                                    <p class="text-[10px] font-bold text-red-500 uppercase leading-none mb-1">Cancelled
+                                    </p>
+                                    <p class="text-xs font-bold leading-tight truncate text-slate-500">Miller / White
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1"></div>
+                        </div>
+                        <!-- 09:00 AM -->
+                        <div class="grid grid-cols-[100px_repeat(8,1fr)] h-24">
+                            <div
+                                class="p-4 border-r border-slate-200 dark:border-primary/20 flex flex-col items-center justify-center">
+                                <span class="text-sm font-bold">09:00</span>
+                                <span class="text-[10px] opacity-40 uppercase">AM</span>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20 relative">
+                                <div
+                                    class="h-full w-full bg-primary/20 border-l-4 border-primary rounded-md p-2 overflow-hidden cursor-pointer">
+                                    <p class="text-[10px] font-bold text-primary uppercase leading-none mb-1">Confirmed
+                                    </p>
+                                    <p class="text-xs font-bold leading-tight truncate">Academy Lvl 1</p>
+                                </div>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20 relative">
+                                <div
+                                    class="h-full w-full bg-primary/20 border-l-4 border-primary rounded-md p-2 overflow-hidden cursor-pointer">
+                                    <p class="text-[10px] font-bold text-primary uppercase leading-none mb-1">Confirmed
+                                    </p>
+                                    <p class="text-xs font-bold leading-tight truncate">Academy Lvl 2</p>
+                                </div>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20 relative">
+                                <div
+                                    class="h-full w-full bg-orange-500/20 border-l-4 border-orange-500 rounded-md p-2 overflow-hidden">
+                                    <p class="text-[10px] font-bold text-orange-500 uppercase leading-none mb-1">Pending
+                                    </p>
+                                    <p class="text-xs font-bold leading-tight truncate">Peterson Team</p>
+                                </div>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1"></div>
+                        </div>
+                        <!-- 10:30 AM -->
+                        <div class="grid grid-cols-[100px_repeat(8,1fr)] h-24">
+                            <div
+                                class="p-4 border-r border-slate-200 dark:border-primary/20 flex flex-col items-center justify-center">
+                                <span class="text-sm font-bold">10:30</span>
+                                <span class="text-[10px] opacity-40 uppercase">AM</span>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20 relative">
+                                <div
+                                    class="h-full w-full bg-primary/20 border-l-4 border-primary rounded-md p-2 overflow-hidden">
+                                    <p class="text-xs font-bold leading-tight truncate">Tournament Qual</p>
+                                </div>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1"></div>
+                        </div>
+                        <!-- 12:00 PM -->
+                        <div class="grid grid-cols-[100px_repeat(8,1fr)] h-24">
+                            <div
+                                class="p-4 border-r border-slate-200 dark:border-primary/20 flex flex-col items-center justify-center bg-slate-50 dark:bg-primary/5">
+                                <span class="text-sm font-bold">12:00</span>
+                                <span class="text-[10px] opacity-40 uppercase">PM</span>
+                            </div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1 border-r border-slate-200 dark:border-primary/20"></div>
+                            <div class="p-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
