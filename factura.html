@@ -1,20 +1,12 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="en">
-
+<html class="dark" lang="es">
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>PadelPro Manager - Book your Court</title>
+    <title>PadelPro Manager - Reservar Cancha</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -22,236 +14,229 @@
                 extend: {
                     colors: {
                         "primary": "#59f20d",
-                        "background-light": "#f6f8f5",
-                        "background-dark": "#162210",
+                        "surface": "#121d0d",
+                        "background": "#0a1208",
                     },
                     fontFamily: {
-                        "display": ["Lexend"]
-                    },
-                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                        "sans": ["Inter", "sans-serif"]
+                    }
                 },
             },
         }
     </script>
+    <style>
+        .glass-card {
+            background: rgba(18, 29, 13, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(89, 242, 13, 0.15);
+        }
+        .toast { position: fixed; top: 2rem; right: 2rem; padding: 1rem 2rem; border-radius: 1rem; color: white; font-weight: 700; transform: translateX(120%); transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999; }
+        .toast.show { transform: translateX(0); }
+        .toast-success { background: #59f20d; color: #0a1208; }
+        .toast-error { background: #ef4444; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        .shake { animation: shake 0.4s ease-in-out; }
+    </style>
 </head>
+<body class="bg-background text-slate-100 font-sans selection:bg-primary selection:text-background text-sm opacity-0 transition-opacity duration-300" id="main-body">
+    <div id="toast" class="toast"></div>
+    <script>
+        fetch('api_sesion.php')
+            .then(r => r.json())
+            .then(data => {
+                if (!data.logged_in) {
+                    window.location.href = 'login.html';
+                } else {
+                    document.getElementById('main-body').classList.remove('opacity-0');
+                    if (data.rol === 'Jugador') {
+                        document.querySelectorAll('[data-nav="dashboard"], [data-nav="reports"]').forEach(el => el.classList.add('hidden'));
+                    }
+                }
+            });
+    </script>
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-72 border-r border-primary/10 bg-surface/50 hidden lg:flex flex-col">
+            <div class="p-8 flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary text-4xl">sports_tennis</span>
+                <h1 class="text-2xl font-black tracking-tighter uppercase italic">PadelPro</h1>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-primary/10" href="panel de control.html" data-nav="dashboard">
+                    <span class="material-symbols-outlined group-hover:text-primary">dashboard</span>
+                    <span class="font-bold">Panel de Control</span>
+                </a>
+                <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-primary/10" href="citas.html" data-nav="reservations">
+                    <span class="material-symbols-outlined group-hover:text-primary">calendar_today</span>
+                    <span class="font-bold">Reservas</span>
+                </a>
+                <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-primary/10" href="factura.html" data-nav="courts">
+                    <span class="material-symbols-outlined group-hover:text-primary">payments</span>
+                    <span class="font-bold">Reservar Cancha</span>
+                </a>
+                <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-red-500/20 text-red-400 mt-10" href="logout.php">
+                    <span class="material-symbols-outlined">logout</span>
+                    <span class="font-bold">Cerrar Sesión</span>
+                </a>
+            </nav>
+        </aside>
 
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen">
-    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
-        <div class="layout-container flex h-full grow flex-col">
-            <!-- Navigation Bar -->
-            <header
-                class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-6 py-4 lg:px-20 bg-background-light dark:bg-background-dark sticky top-0 z-50">
-                <div class="flex items-center gap-4">
-                    <div class="size-8 text-primary">
-                        <span class="material-symbols-outlined text-4xl">mountain_steam</span>
-                    </div>
-                    <h2 class="text-xl font-bold tracking-tight">PadelPro Manager</h2>
-                </div>
-                <div class="flex items-center gap-4">
-                    <button
-                        class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-200 dark:bg-slate-800 hover:bg-primary/20 transition-colors">
-                        <span class="material-symbols-outlined text-xl">notifications</span>
-                    </button>
-                    <button
-                        class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-200 dark:bg-slate-800 hover:bg-primary/20 transition-colors">
-                        <span class="material-symbols-outlined text-xl">account_circle</span>
-                    </button>
-                    <div
-                        class="h-10 w-10 rounded-full bg-primary/30 flex items-center justify-center overflow-hidden border-2 border-primary">
-                        <img alt="User avatar" data-alt="Close up portrait of a smiling player"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbjX4R7gY1o7JFMMq2U46U1LGZpo4BZIvtfufzw8vrouHHdiuAfbkMzXFzNNblCYAR5NHUtM6PQ5fx7twTnNXcgD2TY0QFyOOt7z8WNR9Qq4ZUiuT52LaQ3uMWMCyPDeld2JS8WRdV3G8rmK5uvbygDiEnK2gfQdwJDIPErgDNUJWvCTgzo11M080UlaCQIN2Y41JIoiKEeIwg-kFHW5-0R6EEzG2_W_v7DUQVlTlgWP0k0_szY2c3z_owzJvyTm0bxbCnX_uN19A" />
-                    </div>
+        <!-- Main -->
+        <main class="flex-1 flex flex-col bg-background">
+            <!-- Header -->
+            <header class="h-20 flex items-center justify-between px-10 border-b border-white/5">
+                <div>
+                    <h2 class="text-lg font-bold text-white uppercase tracking-tighter italic leading-none mb-1">Nueva Reserva</h2>
+                    <p class="text-xs text-slate-400">Selección de bloques de 90 min Nueva Esparta</p>
                 </div>
             </header>
-            <main class="flex flex-1 flex-col px-6 py-10 lg:px-20 lg:py-16">
-                <!-- Main Header Section -->
-                <div class="mb-12 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                    <div class="flex flex-col gap-2">
-                        <h1 class="text-4xl font-black tracking-tight lg:text-5xl">Book your Court</h1>
-                        <p class="text-lg opacity-60">Reserve your favorite court in seconds. Professional experience
-                            guaranteed.</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="flex -space-x-4">
-                            <div class="size-12 rounded-full border-4 border-background-dark bg-slate-400 overflow-hidden">
-                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbjX4R7gY1o7JFMMq2U46U1LGZpo4BZIvtfufzw8vrouHHdiuAfbkMzXFzNNblCYAR5NHUtM6PQ5fx7twTnNXcgD2TY0QFyOOt7z8WNR9Qq4ZUiuT52LaQ3uMWMCyPDeld2JS8WRdV3G8rmK5uvbygDiEnK2gfQdwJDIPErgDNUJWvCTgzo11M080UlaCQIN2Y41JIoiKEeIwg-kFHW5-0R6EEzG2_W_v7DUQVlTlgWP0k0_szY2c3z_owzJvyTm0bxbCnX_uN19A" />
-                            </div>
-                            <div class="size-12 rounded-full border-4 border-background-dark bg-slate-500 overflow-hidden">
-                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbjX4R7gY1o7JFMMq2U46U1LGZpo4BZIvtfufzw8vrouHHdiuAfbkMzXFzNNblCYAR5NHUtM6PQ5fx7twTnNXcgD2TY0QFyOOt7z8WNR9Qq4ZUiuT52LaQ3uMWMCyPDeld2JS8WRdV3G8rmK5uvbygDiEnK2gfQdwJDIPErgDNUJWvCTgzo11M080UlaCQIN2Y41JIoiKEeIwg-kFHW5-0R6EEzG2_W_v7DUQVlTlgWP0k0_szY2c3z_owzJvyTm0bxbCnX_uN19A" />
-                            </div>
-                            <div class="size-12 rounded-full border-4 border-background-dark bg-primary flex items-center justify-center font-bold text-background-dark">
-                                +24</div>
-                        </div>
-                        <p class="text-sm font-semibold opacity-80">Available now</p>
-                    </div>
-                </div>
 
-                <form action="validacion_factura.php" method="POST" class="grid grid-cols-1 gap-12 lg:grid-cols-2">
-                    <div class="flex flex-col gap-10">
+            <!-- Content -->
+            <div class="flex-1 p-10">
+                <form id="booking-form" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <!-- Steps -->
+                    <div class="md:col-span-2 space-y-10">
                         <!-- Court Selection -->
-                        <section class="flex flex-col gap-6">
-                            <h3 class="text-2xl font-bold tracking-tight">1. Select Court</h3>
-                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                <!-- Option 1 -->
-                                <label class="group relative cursor-pointer">
-                                    <input checked="" class="peer sr-only" name="court" type="radio" value="main_court" />
-                                    <div
-                                        class="flex flex-col gap-4 rounded-2xl border-2 border-slate-200 dark:border-slate-800 p-5 transition-all group-hover:border-primary peer-checked:border-primary peer-checked:bg-primary/5">
-                                        <div
-                                            class="aspect-video w-full rounded-lg bg-slate-200 dark:bg-slate-800 overflow-hidden shadow-inner flex items-center justify-center">
-                                            <img alt="Padel Court 1" data-alt="Wide shot of a blue padel court"
-                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbjX4R7gY1o7JFMMq2U46U1LGZpo4BZIvtfufzw8vrouHHdiuAfbkMzXFzNNblCYAR5NHUtM6PQ5fx7twTnNXcgD2TY0QFyOOt7z8WNR9Qq4ZUiuT52LaQ3uMWMCyPDeld2JS8WRdV3G8rmK5uvbygDiEnK2gfQdwJDIPErgDNUJWvCTgzo11M080UlaCQIN2Y41JIoiKEeIwg-kFHW5-0R6EEzG2_W_v7DUQVlTlgWP0k0_szY2c3z_owzJvyTm0bxbCnX_uN19A" />
-                                        </div>
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <h4 class="font-bold">Main Court</h4>
-                                                <p class="text-sm opacity-60">Panoramic View</p>
-                                            </div>
-                                            <p class="text-xl font-black text-primary">$35/h</p>
-                                        </div>
+                        <section class="glass-card p-10 rounded-[2.5rem]">
+                            <h3 class="text-2xl font-black italic tracking-tighter mb-8 uppercase">1. Seleccionar Cancha</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <label class="cursor-pointer group flex-1">
+                                    <input checked name="cancha_id" type="radio" value="1" class="hidden peer">
+                                    <div class="p-6 rounded-2xl border-2 border-white/5 bg-white/5 peer-checked:border-primary peer-checked:bg-primary/5 transition-all text-center">
+                                        <span class="material-symbols-outlined text-4xl mb-2 group-hover:scale-110 transition-transform">stadium</span>
+                                        <h4 class="font-black text-lg">Principal</h4>
+                                        <p class="text-xs opacity-50">Interior VIP</p>
                                     </div>
-                                    <span
-                                        class="absolute right-4 top-4 hidden h-6 w-6 items-center justify-center rounded-full bg-primary text-background-dark peer-checked:flex">
-                                        <span class="material-symbols-outlined text-sm font-bold">check</span>
-                                    </span>
                                 </label>
-                                <!-- Option 2 -->
-                                <label class="group relative cursor-pointer">
-                                    <input class="peer sr-only" name="court" type="radio" value="standard_court" />
-                                    <div
-                                        class="flex flex-col gap-4 rounded-2xl border-2 border-slate-200 dark:border-slate-800 p-5 transition-all group-hover:border-primary peer-checked:border-primary peer-checked:bg-primary/5">
-                                        <div
-                                            class="aspect-video w-full rounded-lg bg-slate-200 dark:bg-slate-800 overflow-hidden shadow-inner flex items-center justify-center">
-                                            <img alt="Padel Court 2" data-alt="Wide shot of an indoor padel court"
-                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbjX4R7gY1o7JFMMq2U46U1LGZpo4BZIvtfufzw8vrouHHdiuAfbkMzXFzNNblCYAR5NHUtM6PQ5fx7twTnNXcgD2TY0QFyOOt7z8WNR9Qq4ZUiuT52LaQ3uMWMCyPDeld2JS8WRdV3G8rmK5uvbygDiEnK2gfQdwJDIPErgDNUJWvCTgzo11M080UlaCQIN2Y41JIoiKEeIwg-kFHW5-0R6EEzG2_W_v7DUQVlTlgWP0k0_szY2c3z_owzJvyTm0bxbCnX_uN19A" />
-                                        </div>
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <h4 class="font-bold">Standard Court</h4>
-                                                <p class="text-sm opacity-60">Indoor Facility</p>
-                                            </div>
-                                            <p class="text-xl font-black text-primary">$25/h</p>
-                                        </div>
+                                <label class="cursor-pointer group flex-1">
+                                    <input name="cancha_id" type="radio" value="2" class="hidden peer">
+                                    <div class="p-6 rounded-2xl border-2 border-white/5 bg-white/5 peer-checked:border-primary peer-checked:bg-primary/5 transition-all text-center">
+                                        <span class="material-symbols-outlined text-4xl mb-2 group-hover:scale-110 transition-transform">sports_tennis</span>
+                                        <h4 class="font-black text-lg">Cancha #2</h4>
+                                        <p class="text-xs opacity-50">Outdoor</p>
                                     </div>
-                                    <span
-                                        class="absolute right-4 top-4 hidden h-6 w-6 items-center justify-center rounded-full bg-primary text-background-dark peer-checked:flex">
-                                        <span class="material-symbols-outlined text-sm font-bold">check</span>
-                                    </span>
                                 </label>
                             </div>
                         </section>
-                        <!-- Date & Time Selection -->
-                        <section class="flex flex-col gap-6">
-                            <h3 class="text-2xl font-bold tracking-tight">2. Date &amp; Time</h3>
-                            <div class="flex flex-col gap-6 rounded-2xl border-2 border-slate-200 dark:border-slate-800 p-8">
-                                <div class="flex flex-col gap-4">
-                                    <label class="text-sm font-bold uppercase tracking-widest opacity-60">Select
-                                        Day</label>
-                                    <div class="flex flex-wrap gap-2">
-                                        <label class="cursor-pointer">
-                                            <input type="radio" name="booking_day" value="mon_23" class="sr-only peer">
-                                            <div class="flex h-14 w-24 flex-col items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 hover:border-primary peer-checked:border-primary peer-checked:bg-primary/10 transition-all">
-                                                <span class="text-xs font-bold opacity-60 uppercase">Mon</span>
-                                                <span class="text-lg font-black">23</span>
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer">
-                                            <input type="radio" name="booking_day" value="tue_24" class="sr-only peer" checked>
-                                            <div class="flex h-14 w-24 flex-col items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 hover:border-primary peer-checked:border-primary peer-checked:bg-primary/10 transition-all">
-                                                <span class="text-xs font-bold opacity-60 uppercase">Tue</span>
-                                                <span class="text-lg font-black">24</span>
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer">
-                                            <input type="radio" name="booking_day" value="wed_25" class="sr-only peer">
-                                            <div class="flex h-14 w-24 flex-col items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 hover:border-primary peer-checked:border-primary peer-checked:bg-primary/10 transition-all">
-                                                <span class="text-xs font-bold opacity-60 uppercase">Wed</span>
-                                                <span class="text-lg font-black">25</span>
-                                            </div>
-                                        </label>
+
+                        <!-- Time Selection -->
+                        <section class="glass-card p-10 rounded-[2.5rem]">
+                            <h3 class="text-2xl font-black italic tracking-tighter mb-8 uppercase">2. Agenda Profesional</h3>
+                            <div class="grid grid-cols-1 gap-8">
+                                <div class="space-y-4">
+                                    <p class="text-[10px] font-black uppercase text-primary">Selecciona la Fecha</p>
+                                    <input name="fecha" type="date" value="2026-04-04" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 text-sm focus:ring-1 focus:ring-primary outline-none transition-all">
+                                </div>
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div class="space-y-4">
+                                        <p class="text-[10px] font-black uppercase text-primary">Hora Inicio</p>
+                                        <input name="hora_inicio" type="time" value="18:30" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 text-sm focus:ring-1 focus:ring-primary outline-none transition-all">
+                                    </div>
+                                    <div class="space-y-4">
+                                        <p class="text-[10px] font-black uppercase text-primary">Hora Fin</p>
+                                        <input name="hora_fin" type="time" value="20:00" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 text-sm focus:ring-1 focus:ring-primary outline-none transition-all">
                                     </div>
                                 </div>
-                                <div class="flex flex-col gap-4">
-                                    <label class="text-sm font-bold uppercase tracking-widest opacity-60">Select
-                                        Time</label>
-                                    <div class="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                                        <label class="cursor-pointer">
-                                            <input type="radio" name="booking_time" value="08:00" class="sr-only peer">
-                                            <div class="rounded-lg border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-center hover:bg-slate-100 dark:hover:bg-slate-800 peer-checked:bg-primary peer-checked:text-background-dark transition-all">08:00</div>
-                                        </label>
-                                        <label class="cursor-pointer">
-                                            <input type="radio" name="booking_time" value="09:30" class="sr-only peer">
-                                            <div class="rounded-lg border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-center hover:bg-slate-100 dark:hover:bg-slate-800 peer-checked:bg-primary peer-checked:text-background-dark transition-all">09:30</div>
-                                        </label>
-                                        <label class="cursor-pointer">
-                                            <input type="radio" name="booking_time" value="11:00" class="sr-only peer" checked>
-                                            <div class="rounded-lg border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-center hover:bg-slate-100 dark:hover:bg-slate-800 peer-checked:bg-primary peer-checked:text-background-dark transition-all">11:00</div>
-                                        </label>
-                                        <label class="cursor-pointer">
-                                            <input type="radio" name="booking_time" value="12:30" class="sr-only peer">
-                                            <div class="rounded-lg border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-center hover:bg-slate-100 dark:hover:bg-slate-800 peer-checked:bg-primary peer-checked:text-background-dark transition-all">12:30</div>
-                                        </label>
-                                    </div>
+                            </div>
+                        </section>
+
+                        <!-- NEW: Payment Section -->
+                        <section class="glass-card p-10 rounded-[2.5rem]">
+                            <h3 class="text-2xl font-black italic tracking-tighter mb-8 uppercase text-primary">3. Detalles de Pago</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="space-y-4">
+                                    <p class="text-[10px] font-black uppercase text-primary">Método de Pago</p>
+                                    <select name="metodo_pago" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 text-sm focus:ring-1 focus:ring-primary outline-none transition-all appearance-none">
+                                        <option value="Pago Móvil">Pago Móvil</option>
+                                        <option value="Efectivo">Efectivo</option>
+                                        <option value="Transferencia">Transferencia</option>
+                                        <option value="Tarjeta">Tarjeta de Débito</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-4">
+                                    <p class="text-[10px] font-black uppercase text-primary">Referencia (Alfanumérico)</p>
+                                    <input name="referencia" type="text" placeholder="Ej: REF12345" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 text-sm focus:ring-1 focus:ring-primary outline-none transition-all" required pattern="[A-Za-z0-9]+">
                                 </div>
                             </div>
                         </section>
                     </div>
-                    <div class="flex flex-col gap-10">
-                        <!-- Booking Summary & Payment -->
-                        <section class="flex flex-col gap-6 lg:sticky lg:top-32">
-                            <h3 class="text-2xl font-bold tracking-tight">3. Summary &amp; Pay</h3>
-                            <div
-                                class="flex flex-col gap-8 rounded-3xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-10 shadow-xl backdrop-blur-sm">
-                                <div class="flex flex-col gap-4 border-b border-slate-200 dark:border-slate-800 pb-8">
-                                    <div class="flex justify-between items-center">
-                                        <p class="opacity-60">Selected Court</p>
-                                        <p class="font-bold">Main Court (Panoramic)</p>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <p class="opacity-60">Date &amp; Time</p>
-                                        <p class="font-bold">Tuesday, 24 Oct - 11:00 AM</p>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <p class="opacity-60">Duration</p>
-                                        <p class="font-bold">90 Minutes</p>
-                                    </div>
+
+                    <!-- Summary / Payment -->
+                    <div class="md:col-span-1">
+                        <div class="glass-card p-10 rounded-[2.5rem] sticky top-0 border-primary/30">
+                            <h3 class="text-xl font-black italic tracking-tighter mb-6 uppercase">Control de Seguridad</h3>
+                            <div class="space-y-6">
+                                <div class="p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                                    <p class="text-[10px] text-primary font-black uppercase mb-1">Validación Activa</p>
+                                    <p class="text-xs opacity-60">El sistema verificará conflictos de horario automáticamente antes de confirmar.</p>
                                 </div>
-                                <div class="flex flex-col gap-4">
-                                    <div class="flex items-center justify-between text-xl font-bold">
-                                        <p>Total due</p>
-                                        <p class="text-3xl font-black text-primary">$35.00</p>
-                                    </div>
-                                    <p class="text-sm opacity-60">Price includes all taxes and court maintenance fee.
-                                    </p>
-                                </div>
-                                <div class="flex flex-col gap-4 pt-4">
-                                    <button type="submit"
-                                        class="flex h-16 w-full items-center justify-center gap-3 rounded-2xl bg-primary text-background-dark font-black text-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                                        <span class="material-symbols-outlined text-2xl">credit_card</span>
-                                        Confirm Booking
-                                    </button>
-                                    <a href="index.html"
-                                        class="flex h-16 w-full items-center justify-center gap-3 rounded-2xl border-2 border-slate-200 dark:border-slate-800 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
-                                        Cancel &amp; Exit
-                                    </a>
-                                </div>
-                                <div class="flex items-center justify-center gap-4 opacity-40 grayscale">
-                                    <span class="material-symbols-outlined text-4xl">payments</span>
-                                    <span class="material-symbols-outlined text-4xl">contactless</span>
-                                    <span class="material-symbols-outlined text-4xl">security</span>
-                                </div>
+                                <button type="submit" class="w-full bg-primary text-background p-5 rounded-3xl font-black text-lg hover:scale-105 transition-all shadow-xl shadow-primary/20 uppercase tracking-tighter italic">Verificar y Reservar</button>
+                                <p class="text-[10px] text-center opacity-30 mt-4">Sistema de validación v2.1 activo</p>
                             </div>
-                        </section>
+                        </div>
                     </div>
                 </form>
-            </main>
-            <!-- Footer -->
-            <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 px-6 py-10 lg:px-20 text-center">
-                <p class="text-sm opacity-40">© 2023 PadelPro Manager. All rights reserved. Professional Padel
-                    Facilities.</p>
-            </footer>
-        </div>
+            </div>
+        </main>
     </div>
-</body>
 
+    <script>
+        // --- SISTEMA DE NOTIFICACIONES ---
+        function showNotification(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast show toast-${type}`;
+            setTimeout(() => { toast.classList.remove('show'); }, 4000);
+        }
+
+        document.getElementById('booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Procesando...';
+
+            fetch('validacion_factura.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    setTimeout(() => { window.location.href = 'citas.html?success=1'; }, 2000);
+                } else {
+                    showNotification(data.message, 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Verificar y Reservar';
+                }
+            })
+            .catch(err => {
+                showNotification('Error de conexión.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Verificar y Reservar';
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Navigation Highlight (Universal)
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('[data-nav]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPath) {
+                    link.classList.add('bg-primary', 'text-background');
+                    link.classList.remove('hover:bg-primary/10');
+                }
+            });
+
+            // Set default date to today
+            const dateInput = document.querySelector('input[type="date"]');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.value = today;
+                dateInput.min = today;
+            }
+        });
+    </script>
+</body>
 </html>

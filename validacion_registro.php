@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json'); // --- CABECERA API ---
 require 'conex.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -10,10 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
-    // Verificar que las contraseñas coincidan
+    // Verificar contraseñas
     if ($password !== $confirm_password) {
-        echo "<h3>Error: Las contraseñas no coinciden</h3> <a href='registro.html'>Volver al Registro</a>";
-        $conexion->close();
+        echo json_encode(['success' => false, 'message' => 'ERROR: Las contraseñas no coinciden.']);
         exit();
     }
 
@@ -23,13 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sssss", $username, $cedula, $email, $telefono, $passwordhash);
 
     if ($stmt->execute()) {
-        echo "<h3>Registro Exitoso</h3> <a href='login.html'>Ir al Login</a>";
+        echo json_encode(['success' => true, 'message' => 'REGISTRO EXITOSO. Ya puedes iniciar sesión.']);
+        exit();
     }
     else {
-        echo "Error: El usuario o email ya están registrados. <a href='registro.html'>Volver</a>";
+        echo json_encode(['success' => false, 'message' => 'ERROR: El usuario o email ya están registrados.']);
+        exit();
     }
 
-    $stmt->close();
     $conexion->close();
 }
 ?>

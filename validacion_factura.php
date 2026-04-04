@@ -1,52 +1,82 @@
 <?php
 session_start();
+header('Content-Type: application/json'); // --- CABECERA API (REQUISITO NEGOCIO) ---
 include 'conex.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Check if user is logged in
     if (!isset($_SESSION['user_id'])) {
-        die("Debe iniciar sesión para realizar una reserva. <a href='login.html'>Volver al Login</a>");
+        echo json_encode(['success' => false, 'message' => 'ERROR: Debe iniciar sesión para realizar reservas.']);
+        exit();
     }
 
     $usuario_id = $_SESSION['user_id'];
-    $court = $_POST['court'];
-    $booking_day = $_POST['booking_day'];
-    $booking_time = $_POST['booking_time'];
+    $cancha_id = $_POST['cancha_id'];
+    $fecha = $_POST['fecha'];
+    $hora_inicio = $_POST['hora_inicio'];
+    $hora_fin = $_POST['hora_fin'];
+    
+    // Pago
+    $metodo_pago = $_POST['metodo_pago'] ?? 'Efectivo';
+    $referencia = trim($_POST['referencia'] ?? '');
 
-    // Check if fields are not empty
-    if (empty($court) || empty($booking_day) || empty($booking_time)) {
-        die("Error: Todos los campos son obligatorios. <a href='factura.html'>Volver</a>");
+    // Validación Referencia
+    if (!ctype_alnum($referencia) && $referencia !== "") {
+        echo json_encode(['success' => false, 'message' => 'ERROR: La referencia de pago debe ser alfanumérica.']);
+        exit();
     }
 
-    // Insert into database
-    $stmt = $conexion->prepare("INSERT INTO reservas (usuario_id, court, booking_day, booking_time) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("isss", $usuario_id, $court, $booking_day, $booking_time);
+    // Regla de 90 Minutos
+    $start = strtotime($hora_inicio);
+    $end = strtotime($hora_fin);
+    $diff_minutes = round(abs($end - $start) / 60);
 
-    if ($stmt->execute()) {
-        echo "<!DOCTYPE html>
-        <html lang='es'>
-        <head>
-            <meta charset='UTF-8'>
-            <title>Reserva Confirmada</title>
-            <script src='https://cdn.tailwindcss.com'></script>
-        </head>
-        <body class='bg-[#162210] text-[#f6f8f5] flex items-center justify-center min-h-screen'>
-            <div class='bg-[#162210]/50 border border-[#59f20d]/20 p-10 rounded-2xl text-center shadow-xl'>
-                <span class='text-6xl text-[#59f20d]'>check_circle</span>
-                <h1 class='text-4xl font-bold mt-4'>¡Reserva Exitosa!</h1>
-                <p class='mt-2 opacity-60'>Tu cancha ha sido reservada para el $booking_day a las $booking_time.</p>
-                <a href='index.html' class='inline-block mt-8 bg-[#59f20d] text-[#162210] font-bold px-8 py-3 rounded-lg'>Volver al Inicio</a>
-            </div>
-        </body>
-        </html>";
-    } else {
-        echo "Error al procesar la reserva: " . $conexion->error;
+    if ($diff_minutes != 90) {
+        echo json_encode(['success' => false, 'message' => 'ERROR: El sistema solo permite bloques exactos de 90 minutos.']);
+        exit();
     }
 
-    $stmt->close();
+    // Validación de Conflicto
+    $sql_conflicto = "SELECT id FROM reservas 
+                      WHERE cancha_id = ? 
+                      AND fecha = ? 
+                      AND status NOT IN ('Cancelada')
+                      AND (
+                          (hora_inicio < ? AND hora_fin > ?)
+                          OR (hora_inicio >= ? AND hora_inicio < ?)
+                          OR (hora_fin > ? AND hora_fin <= ?)
+                      )";
+    
+    $stmt_check = $conexion->prepare($sql_conflicto);
+    $stmt_check->bind_param("isssssss", $cancha_id, $fecha, $hora_fin, $hora_inicio, $hora_inicio, $hora_fin, $hora_inicio, $hora_fin);
+    $stmt_check->execute();
+    if ($stmt_check->get_result()->num_rows > 0) {
+        echo json_encode(['success' => false, 'message' => 'ERROR: Solapamiento detectado. La cancha ya está reservada para este bloque horario.']);
+        exit();
+    }
+
+    // Transacción
+    $conexion->begin_transaction();
+    try {
+        $stmt_res = $conexion->prepare("INSERT INTO reservas (usuario_id, cancha_id, fecha, hora_inicio, hora_fin, status, payment_status) VALUES (?, ?, ?, ?, ?, 'Confirmada', 'Pagado')");
+        $stmt_res->bind_param("iisss", $usuario_id, $cancha_id, $fecha, $hora_inicio, $hora_fin);
+        $stmt_res->execute();
+        $reserva_id = $stmt_res->insert_id;
+
+        $res_precio = $conexion->query("SELECT precio_hora FROM canchas WHERE id = $cancha_id");
+        $precio = $res_precio->fetch_assoc()['precio_hora'] * 1.5;
+
+        $stmt_pago = $conexion->prepare("INSERT INTO pagos (reserva_id, monto, metodo, referencia) VALUES (?, ?, ?, ?)");
+        $stmt_pago->bind_param("idss", $reserva_id, $precio, $metodo_pago, $referencia);
+        $stmt_pago->execute();
+
+        $conexion->commit();
+        echo json_encode(['success' => true, 'message' => 'RESERVA EXITOSA. El bloque horario ha sido asegurado.']);
+
+    } catch (Exception $e) {
+        $conexion->rollback();
+        echo json_encode(['success' => false, 'message' => 'ERROR CRÍTICO: ' . $e->getMessage()]);
+    }
+
     $conexion->close();
-} else {
-    header("Location: factura.html");
-    exit();
 }
 ?>

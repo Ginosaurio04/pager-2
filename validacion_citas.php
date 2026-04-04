@@ -4,42 +4,46 @@ include 'conex.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $player_name = $_POST['player_name'];
-    $court = $_POST['court'];
-    $booking_day = date('Y-m-d'); // For walk-ins, we use today
-    $booking_time = date('H:i');
+    $cancha_id = $_POST['cancha_id'];
+    $fecha = date('Y-m-d');
+    $hora_inicio = date('H:i:s');
+    $hora_fin = date('H:i:s', strtotime('+90 minutes')); // Registro rápido de 90 min
 
-    if (empty($player_name) || empty($court)) {
-        die("Error: Nombre del jugador y cancha son obligatorios. <a href='citas.html'>Volver</a>");
+    if (empty($player_name) || empty($cancha_id)) {
+        die("Error: Información incompleta. <a href='citas.html'>Volver</a>");
     }
 
-    // Insert into database (usuario_id null for walk-ins)
-    $stmt = $conexion->prepare("INSERT INTO reservas (player_name, court, booking_day, booking_time) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $player_name, $court, $booking_day, $booking_time);
+    // --- VALIDACIÓN DE CONFLICTO PROFESIONAL (OVERBOOKING) ---
+    $sql_conflicto = "SELECT id FROM reservas 
+                      WHERE cancha_id = ? 
+                      AND fecha = ? 
+                      AND status != 'Cancelada'
+                      AND (
+                          (hora_inicio < ? AND hora_fin > ?)
+                          OR (hora_inicio >= ? AND hora_inicio < ?)
+                          OR (hora_fin > ? AND hora_fin <= ?)
+                      )";
+    
+    $stmt_check = $conexion->prepare($sql_conflicto);
+    $stmt_check->bind_param("isssssss", $cancha_id, $fecha, $hora_fin, $hora_inicio, $hora_inicio, $hora_fin, $hora_inicio, $hora_fin);
+    $stmt_check->execute();
+    $res_check = $stmt_check->get_result();
+
+    if ($res_check->num_rows > 0) {
+        die("ERROR: La cancha está ocupada actualmente para un bloque de 90 min. <a href='citas.html'>Volver</a>");
+    }
+
+    // Insertar registro rápido (usuario_id NULL para walk-ins)
+    $stmt = $conexion->prepare("INSERT INTO reservas (player_name, cancha_id, fecha, hora_inicio, hora_fin) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sisss", $player_name, $cancha_id, $fecha, $hora_inicio, $hora_fin);
 
     if ($stmt->execute()) {
-        echo "<!DOCTYPE html>
-        <html lang='es'>
-        <head>
-            <meta charset='UTF-8'>
-            <title>Walk-in Confirmado</title>
-            <script src='https://cdn.tailwindcss.com'></script>
-        </head>
-        <body class='bg-[#162210] text-[#f6f8f5] flex items-center justify-center min-h-screen'>
-            <div class='bg-[#162210]/50 border border-[#59f20d]/20 p-10 rounded-2xl text-center shadow-xl'>
-                <h1 class='text-4xl font-bold mt-4'>¡Walk-in Registrado!</h1>
-                <p class='mt-2 opacity-60'>Jugador: $player_name en $court.</p>
-                <a href='citas.html' class='inline-block mt-8 bg-[#59f20d] text-[#162210] font-bold px-8 py-3 rounded-lg'>Volver a Reservas</a>
-            </div>
-        </body>
-        </html>";
+        header("Location: citas.html?success=1");
     } else {
-        echo "Error al registrar walk-in: " . $conexion->error;
+        echo "Error: " . $conexion->error;
     }
 
     $stmt->close();
     $conexion->close();
-} else {
-    header("Location: citas.html");
-    exit();
 }
 ?>

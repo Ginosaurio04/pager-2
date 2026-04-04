@@ -60,13 +60,19 @@
         .neon-glow:focus-within {
             box-shadow: 0 0 25px rgba(89, 242, 13, 0.2);
         }
+        .toast { position: fixed; top: 2rem; right: 2rem; padding: 1rem 2rem; border-radius: 1rem; color: white; font-weight: 700; transform: translateX(120%); transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999; }
+        .toast.show { transform: translateX(0); }
+        .toast-success { background: #59f20d; color: #0a1208; }
+        .toast-error { background: #ef4444; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        .shake { animation: shake 0.4s ease-in-out; }
     </style>
 </head>
 
-<body
-    class="bg-surface text-on-surface font-display min-h-screen flex items-center justify-center p-6 selection:bg-primary/30 selection:text-primary">
+<body class="bg-surface text-on-surface font-display min-h-screen flex items-center justify-center p-6 selection:bg-primary/30 selection:text-primary">
+    <div id="toast" class="toast"></div>
     <!-- Main Registration Shell -->
-    <div class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <div class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center" id="register-card">
         <!-- Left Side: Brand & Value Prop (Collapses on small screens) -->
         <div class="lg:col-span-12 flex flex-col items-center">
             <!-- Glassmorphism Card -->
@@ -80,26 +86,24 @@
                             class="material-symbols-outlined text-on-primary text-5xl transition-transform group-hover:scale-110">sports_tennis</span>
                     </div>
                     <h1 class="text-4xl lg:text-5xl font-black tracking-tighter mb-4">
-                        Join <span class="text-primary italic">PadelPro</span>
+                        Únete a <span class="text-primary italic">PadelPro</span>
                     </h1>
                     <p class="text-on-surface-variant font-medium max-w-md mx-auto leading-relaxed">
-                        Become part of the elite network of club managers. Experience professional administrative tools
-                        at your fingertips.
+                        Forma parte de la red de élite para gestores de clubes. Experimenta herramientas administrativas profesionales al alcance de tu mano.
                     </p>
                 </div>
                 <!-- Registration Form -->
-                <form action="validacion_registro.php" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Full Name -->
+                <form id="register-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Nombre Completo -->
                     <div class="space-y-2">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Full
-                            Name</label>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Nombre Completo</label>
                         <div class="relative group neon-glow">
                             <span
                                 class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60 text-xl"
                                 data-icon="person">person</span>
                             <input name="username"
                                 class="w-full bg-surface-container-lowest/50 border border-primary/20 rounded-lg py-3 pl-12 pr-4 text-on-surface focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-slate-600 outline-none"
-                                placeholder="John Doe" type="text" required />
+                                placeholder="Juan Pérez" type="text" required />
                         </div>
                     </div>
                     <!-- Cédula (ID) -->
@@ -128,10 +132,10 @@
                                 placeholder="johndoe@email.com" type="email" required />
                         </div>
                     </div>
-                    <!-- Phone -->
+                    <!-- Teléfono -->
                     <div class="space-y-2">
                         <label
-                            class="block text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Phone</label>
+                            class="block text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Teléfono</label>
                         <div class="relative group neon-glow">
                             <span
                                 class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60 text-xl"
@@ -141,10 +145,10 @@
                                 placeholder="+506 0000-0000" type="tel" required />
                         </div>
                     </div>
-                    <!-- Password -->
+                    <!-- Contraseña -->
                     <div class="space-y-2">
                         <label
-                            class="block text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Password</label>
+                            class="block text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Contraseña</label>
                         <div class="relative group neon-glow">
                             <span
                                 class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60 text-xl"
@@ -154,10 +158,9 @@
                                 placeholder="••••••••" type="password" required />
                         </div>
                     </div>
-                    <!-- Confirm Password -->
+                    <!-- Confirmar Contraseña -->
                     <div class="space-y-2">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Confirm
-                            Password</label>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-primary/80 px-1">Confirmar Contraseña</label>
                         <div class="relative group neon-glow">
                             <span
                                 class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary/60 text-xl"
@@ -172,25 +175,60 @@
                         <button
                             class="w-full bg-primary text-on-primary font-headline font-black text-lg py-4 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-primary/20 hover:shadow-primary/40 uppercase tracking-tighter"
                             type="submit">
-                            Create Account
+                            Crear Cuenta
                         </button>
                     </div>
                     <!-- Footer Links -->
                     <div class="md:col-span-2 text-center pt-2">
                         <p class="text-on-surface-variant text-sm">
-                            Already have an account?
-                            <a class="text-primary font-bold hover:underline transition-all ml-1" href="login.html">Sign In</a>
+                            ¿Ya tienes una cuenta?
+                            <a class="text-primary font-bold hover:underline transition-all ml-1" href="login.html">Iniciar Sesión</a>
                         </p>
                     </div>
                 </form>
             </div>
             <!-- Minimal Brand Anchor -->
             <div class="mt-8 text-center flex items-center justify-center gap-2">
-                <span class="text-on-surface-variant/40 font-bold text-xs uppercase tracking-widest">© 2023
-                    PadelPro Management Systems</span>
+                <span class="text-on-surface-variant/40 font-bold text-xs uppercase tracking-widest">© 2026
+                    Sistemas de Gestión PadelPro</span>
             </div>
         </div>
     </div>
+    <script>
+        // --- SISTEMA DE NOTIFICACIONES ---
+        function showNotification(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast show toast-${type}`;
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        // --- MANEJADOR DE REGISTRO AJAX ---
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const card = document.getElementById('register-card');
+            const formData = new FormData(this);
+
+            fetch('validacion_registro.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                } else {
+                    showNotification(data.message, 'error');
+                    card.classList.add('shake');
+                    setTimeout(() => { card.classList.remove('shake'); }, 500);
+                }
+            })
+            .catch(err => {
+                showNotification('Error técnico. Inténtalo más tarde.', 'error');
+            });
+        });
+    </script>
 </body>
 
 </html>

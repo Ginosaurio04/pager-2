@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>PadelPro Manager - Reportes Analíticos</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#59f20d",
+                        "surface": "#121d0d",
+                        "background": "#0a1208",
+                    },
+                    fontFamily: {
+                        "sans": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(18, 29, 13, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(89, 242, 13, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background text-slate-100 font-sans selection:bg-primary selection:text-background min-h-screen opacity-0 transition-opacity duration-300" id="main-body">
+    <script>
+        // --- PORTERO DE PRIVACIDAD (RELACIONES DE NEGOCIO) ---
+        fetch('api_sesion.php')
+            .then(r => r.json())
+            .then(data => {
+                if (!data.logged_in) {
+                    window.location.href = 'login.html';
+                } else if (data.rol === 'Jugador') {
+                    // El Jugador no tiene acceso a reportes financieros
+                    window.location.href = 'citas.html';
+                } else {
+                    document.getElementById('main-body').classList.remove('opacity-0');
+                }
+            });
+    </script>
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-72 border-r border-primary/10 bg-surface/50 hidden lg:flex flex-col">
+            <div class="p-8 flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary text-4xl">sports_tennis</span>
+                <h1 class="text-2xl font-black tracking-tighter uppercase italic">PadelPro</h1>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-primary/10" href="panel de control.html" data-nav="dashboard">
+                    <span class="material-symbols-outlined group-hover:text-primary">dashboard</span>
+                    <span class="font-bold">Panel de Control</span>
+                </a>
+                <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-primary/10" href="citas.html" data-nav="reservations">
+                    <span class="material-symbols-outlined group-hover:text-primary">calendar_today</span>
+                    <span class="font-bold">Reservas</span>
+                </a>
+                <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-primary/10" href="reportes.html" data-nav="reports">
+                    <span class="material-symbols-outlined group-hover:text-primary">analytics</span>
+                    <span class="font-bold">Reportes</span>
+                </a>
+                <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-red-500/20 text-red-400 mt-10" href="logout.php">
+                    <span class="material-symbols-outlined">logout</span>
+                    <span class="font-bold">Cerrar Sesión</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main -->
+        <main class="flex-1 flex flex-col bg-background">
+            <!-- Header -->
+            <header class="h-20 flex items-center justify-between px-10 border-b border-white/5">
+                <div>
+                    <h2 class="text-lg font-bold text-white uppercase tracking-tighter italic leading-none mb-1">Inteligencia de Negocio</h2>
+                    <p class="text-xs text-slate-400">Analítica avanzada para la toma de decisiones empresariales</p>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="flex-1 p-10 space-y-10">
+                <!-- Financial Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-card p-8 rounded-[2rem] border-primary/20">
+                        <p class="text-[10px] font-black uppercase text-primary tracking-widest mb-2">Ingreso Bruto Mensual</p>
+                        <h3 class="text-4xl font-black italic tracking-tighter" id="gross-income">$0.00</h3>
+                        <p class="text-xs opacity-40 mt-2">Cálculo en tiempo real Nueva Esparta</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-[2rem] border-red-500/20">
+                        <p class="text-[10px] font-black uppercase text-red-500 tracking-widest mb-2">Pérdida por Cancelación</p>
+                        <h3 class="text-4xl font-black italic tracking-tighter" id="cancel-loss">$0.00</h3>
+                        <p class="text-xs opacity-40 mt-2">Reservas fuera de las 12 horas</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-[2rem] border-primary/20">
+                        <p class="text-[10px] font-black uppercase text-primary tracking-widest mb-2">Estado de Salud MoM</p>
+                        <h3 class="text-4xl font-black italic tracking-tighter text-primary">+12.4%</h3>
+                        <p class="text-xs opacity-40 mt-2">Referencia respecto al mes anterior</p>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="glass-card p-10 rounded-[2.5rem]">
+                        <h3 class="text-xl font-black italic tracking-tighter mb-8 uppercase">Densidad de Ocupación</h3>
+                        <div id="chart-occupancy"></div>
+                    </div>
+                    <div class="glass-card p-10 rounded-[2.5rem]">
+                        <h3 class="text-xl font-black italic tracking-tighter mb-8 uppercase">Horas Prime (Peak Demand)</h3>
+                        <div id="chart-prime"></div>
+                        <div class="mt-8 flex items-center gap-4">
+                            <span class="w-4 h-4 rounded-full bg-primary pulse"></span>
+                            <p class="text-xs font-bold opacity-60">Horas con demanda superior al 90% (Dynamic Pricing Sugerido)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Analytics Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('api_reportes.php')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('gross-income').innerText = '$' + parseFloat(data.financiero.ingreso_bruto).toFixed(2);
+                    document.getElementById('cancel-loss').innerText = '$' + parseFloat(data.financiero.perdida_cancelacion).toFixed(2);
+
+                    // Occupancy Chart
+                    const occLabels = data.ocupacion.map(o => o.nombre);
+                    const occData = data.ocupacion.map(o => o.tasa);
+                    new ApexCharts(document.querySelector("#chart-occupancy"), {
+                        series: [{ name: 'Ocupación', data: occData }],
+                        chart: { type: 'bar', height: 350, toolbar: { show: false } },
+                        colors: ['#59f20d'],
+                        xaxis: { categories: occLabels },
+                        theme: { mode: 'dark' }
+                    }).render();
+
+                    // Prime Hours (Placeholder if no real data yet)
+                    new ApexCharts(document.querySelector("#chart-prime"), {
+                        series: [{
+                            name: 'Demanda',
+                            data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10]
+                        }],
+                        chart: { type: 'line', height: 350, toolbar: { show: false } },
+                        colors: ['#59f20d'],
+                        xaxis: { categories: ['08:00', '09:30', '11:00', '12:30', '14:00', '15:30', '17:00', '18:30', '20:00', '21:30', '23:00', '00:30'] },
+                        theme: { mode: 'dark' },
+                        stroke: { curve: 'smooth' }
+                    }).render();
+                });
+        });
+    </script>
+</body>
+</html>
