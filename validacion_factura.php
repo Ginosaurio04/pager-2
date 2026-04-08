@@ -20,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $referencia = trim($_POST['referencia'] ?? '');
 
     // Validación Referencia
-    if (!ctype_alnum($referencia) && $referencia !== "") {
-        echo json_encode(['success' => false, 'message' => 'ERROR: La referencia de pago debe ser alfanumérica.']);
+    if (!ctype_digit($referencia) && $referencia !== "") {
+        echo json_encode(['success' => false, 'message' => 'ERROR: La referencia de pago debe ser numérica.']);
         exit();
     }
 

@@ -45,7 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id']) && isset($_POST[
         $nuevo_estado = 'Confirmada';
     } elseif ($action === 'pay') {
         $metodo = $_POST['metodo_pago'] ?? 'Efectivo';
-        $referencia = $_POST['referencia'] ?? '';
+        $referencia = trim($_POST['referencia'] ?? '');
+        
+        // Validación Referencia Numérica
+        if (!ctype_digit($referencia) && $referencia !== "") {
+            echo json_encode(['error' => 'La referencia de pago debe ser numérica.']);
+            exit();
+        }
         
         // Obtener precio y actualizar
         $res_info = $conexion->query("SELECT r.cancha_id, c.precio_hora FROM reservas r JOIN canchas c ON r.cancha_id = c.id WHERE r.id = $reserva_id");
