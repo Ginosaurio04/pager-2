@@ -2,17 +2,6 @@
 # Projecto PadelPro Manager (pager) 🎾
 
 PadelPro Manager (pager) es un sistema desarrollado para optimizar la administración de centros deportivos que operan bajo alta demanda, el sistema reemplaza los registros manuales por una plataforma integral alojada en la nube
-
-
-
-## 📋 Requisitos para Instalación
-
-Install my-project with npm
-
-```bash
-  npm install my-project
-  cd my-project
-```
     
 ## 🚀 Características
 
