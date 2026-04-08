@@ -10,7 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hora_fin = date('H:i:s', strtotime('+90 minutes')); // Registro rápido de 90 min
 
     if (empty($player_name) || empty($cancha_id)) {
-        die("Error: Información incompleta. <a href='citas.html'>Volver</a>");
+        header("Location: citas.html?error=incomplete");
+        exit();
     }
 
     // --- VALIDACIÓN DE CONFLICTO PROFESIONAL (OVERBOOKING) ---
@@ -30,12 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $res_check = $stmt_check->get_result();
 
     if ($res_check->num_rows > 0) {
-        die("ERROR: La cancha está ocupada actualmente para un bloque de 90 min. <a href='citas.html'>Volver</a>");
+        header("Location: citas.html?error=occupied");
+        exit();
     }
 
-    // Insertar registro rápido (usuario_id NULL para walk-ins)
-    $stmt = $conexion->prepare("INSERT INTO reservas (player_name, cancha_id, fecha, hora_inicio, hora_fin) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sisss", $player_name, $cancha_id, $fecha, $hora_inicio, $hora_fin);
+    // Insertar registro rápido (VINCULADO AL USUARIO ACTUAL SI EXISTE)
+    $user_id = $_SESSION['user_id'] ?? null;
+    $stmt = $conexion->prepare("INSERT INTO reservas (player_name, cancha_id, fecha, hora_inicio, hora_fin, usuario_id) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sisssi", $player_name, $cancha_id, $fecha, $hora_inicio, $hora_fin, $user_id);
 
     if ($stmt->execute()) {
         header("Location: citas.html?success=1");

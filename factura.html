@@ -4,10 +4,12 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>PadelPro Manager - Reservar Cancha</title>
+    <title>PadelPro Manager - Cancha a pagar</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <!-- PDF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -73,7 +75,7 @@
                 </a>
                 <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-primary/10" href="factura.html" data-nav="courts">
                     <span class="material-symbols-outlined group-hover:text-primary">payments</span>
-                    <span class="font-bold">Reservar Cancha</span>
+                    <span class="font-bold">Cancha a pagar</span>
                 </a>
                 <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-red-500/20 text-red-400 mt-10" href="logout.php">
                     <span class="material-symbols-outlined">logout</span>
@@ -87,8 +89,13 @@
             <!-- Header -->
             <header class="h-20 flex items-center justify-between px-10 border-b border-white/5">
                 <div>
-                    <h2 class="text-lg font-bold text-white uppercase tracking-tighter italic leading-none mb-1">Nueva Reserva</h2>
-                    <p class="text-xs text-slate-400">Selección de bloques de 90 min Nueva Esparta</p>
+                    <h2 class="text-lg font-bold text-white uppercase tracking-tighter italic leading-none mb-1">Cancha a pagar</h2>
+                    <p class="text-xs text-slate-400">Selección de bloques de 90 min - Nueva Esparta</p>
+                </div>
+                <!-- Navigation Tabs -->
+                <div class="flex gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/5">
+                    <button onclick="switchTab('booking')" id="tab-booking" class="px-6 py-2.5 rounded-xl font-black text-[10px] uppercase transition-all bg-primary text-background shadow-lg shadow-primary/20">Generar Pago</button>
+                    <button onclick="switchTab('history')" id="tab-history" class="px-6 py-2.5 rounded-xl font-black text-[10px] uppercase transition-all text-slate-400 hover:text-white">Historial de Facturas</button>
                 </div>
             </header>
 
@@ -115,6 +122,14 @@
                                         <span class="material-symbols-outlined text-4xl mb-2 group-hover:scale-110 transition-transform">sports_tennis</span>
                                         <h4 class="font-black text-lg">Cancha #2</h4>
                                         <p class="text-xs opacity-50">Outdoor</p>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer group flex-1">
+                                    <input name="cancha_id" type="radio" value="3" class="hidden peer">
+                                    <div class="p-6 rounded-2xl border-2 border-white/5 bg-white/5 peer-checked:border-primary peer-checked:bg-primary/5 transition-all text-center">
+                                        <span class="material-symbols-outlined text-4xl mb-2 group-hover:scale-110 transition-transform">workspace_premium</span>
+                                        <h4 class="font-black text-lg">Cancha #3</h4>
+                                        <p class="text-xs opacity-50">Panorámica VIP</p>
                                     </div>
                                 </label>
                             </div>
@@ -177,8 +192,99 @@
                         </div>
                     </div>
                 </form>
+
+                <!-- History View (Hidden by default) -->
+                <div id="history-view" class="hidden space-y-8 max-w-6xl mx-auto">
+                    <div class="glass-card rounded-[2.5rem] overflow-hidden">
+                        <div class="p-8 border-b border-white/5 flex items-center justify-between">
+                            <h3 class="text-xl font-black uppercase tracking-tighter italic">Registro de Facturaciones</h3>
+                            <span class="text-[10px] font-bold text-primary px-4 py-1.5 bg-primary/10 rounded-full border border-primary/20">AUDITORÍA ACTIVA</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                                        <th class="px-10 py-6">ID</th>
+                                        <th class="px-10 py-6">Fecha / Hora</th>
+                                        <th class="px-10 py-6">Jugador</th>
+                                        <th class="px-10 py-6">Cancha</th>
+                                        <th class="px-10 py-6">Monto</th>
+                                        <th class="px-10 py-6 text-right">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/5" id="history-table-body">
+                                    <!-- AJAX Data -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
+    </div>
+
+    <!-- Hidden Invoice Template for PDF -->
+    <div id="invoice-template" class="hidden">
+        <div style="padding: 60px; font-family: 'Inter', sans-serif; color: #0a1208; background: white;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 60px; border-bottom: 4px solid #59f20d; padding-bottom: 20px;">
+                <div>
+                    <h1 style="font-size: 48px; font-weight: 900; font-style: italic; margin: 0; text-transform: uppercase;">PADELPRO</h1>
+                    <p style="font-size: 14px; opacity: 0.6; margin: 5px 0;">Sede Nueva Esparta, Venezuela</p>
+                </div>
+                <div style="text-align: right;">
+                    <h2 style="font-size: 24px; font-weight: 900; margin: 0; color: #59f20d;">FACTURA COMERCIAL</h2>
+                    <p style="font-size: 14px; font-weight: 700; margin: 5px 0;">ID: #<span id="pdf-id"></span></p>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 60px;">
+                <div>
+                    <p style="font-size: 10px; font-weight: 900; color: #59f20d; text-transform: uppercase; margin-bottom: 15px;">Datos del Cliente</p>
+                    <p style="font-size: 18px; font-weight: 800; margin: 0;" id="pdf-cliente"></p>
+                    <p style="font-size: 14px; opacity: 0.7; margin: 5px 0;">Cédula: <span id="pdf-cedula"></span></p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="font-size: 10px; font-weight: 900; color: #59f20d; text-transform: uppercase; margin-bottom: 15px;">Detalles de la Reserva</p>
+                    <p style="font-size: 14px; font-weight: 700; margin: 0;"><span id="pdf-cancha"></span></p>
+                    <p style="font-size: 14px; opacity: 0.7; margin: 5px 0;"><span id="pdf-fecha"></span></p>
+                    <p style="font-size: 14px; opacity: 0.7; margin: 0;"><span id="pdf-horario"></span></p>
+                </div>
+            </div>
+
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 60px;">
+                <thead>
+                    <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                        <th style="padding: 20px; text-align: left; font-size: 12px; font-weight: 900;">DESCRIPCIÓN</th>
+                        <th style="padding: 20px; text-align: right; font-size: 12px; font-weight: 900;">UNIDADES</th>
+                        <th style="padding: 20px; text-align: right; font-size: 12px; font-weight: 900;">COSTO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 20px; font-size: 14px; font-weight: 700;">Alquiler de Cancha (Bloque de 90 min)</td>
+                        <td style="padding: 20px; text-align: right; font-size: 14px;">1.0</td>
+                        <td style="padding: 20px; text-align: right; font-size: 14px; font-weight: 800;">$<span id="pdf-monto"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <p style="font-size: 10px; font-weight: 900; margin-bottom: 5px;">MÉTODO DE PAGO</p>
+                    <p style="font-size: 14px; font-weight: 700; margin: 0;"><span id="pdf-metodo"></span></p>
+                    <p style="font-size: 12px; opacity: 0.5; margin: 3px 0;">Ref: <span id="pdf-ref"></span></p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="font-size: 12px; font-weight: 700; margin: 0;">TOTAL A PAGAR</p>
+                    <p style="font-size: 36px; font-weight: 900; color: #59f20d; margin: 0;">$<span id="pdf-total"></span></p>
+                </div>
+            </div>
+
+            <div style="margin-top: 80px; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 40px;">
+                <p style="font-size: 12px; font-weight: 700; opacity: 0.5;">¡Gracias por jugar en PadelPro! Nos vemos en la cancha.</p>
+                <p style="font-size: 10px; opacity: 0.3;">Documento generado electrónicamente el <span id="pdf-now"></span></p>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -188,6 +294,101 @@
             toast.textContent = message;
             toast.className = `toast show toast-${type}`;
             setTimeout(() => { toast.classList.remove('show'); }, 4000);
+        }
+
+        // --- GESTIÓN DE PESTAÑAS (TABS) ---
+        let allInvoices = [];
+
+        function switchTab(tab) {
+            const bookingView = document.getElementById('booking-form');
+            const historyView = document.getElementById('history-view');
+            const tabBooking = document.getElementById('tab-booking');
+            const tabHistory = document.getElementById('tab-history');
+
+            if (tab === 'booking') {
+                bookingView.classList.remove('hidden');
+                historyView.classList.add('hidden');
+                tabBooking.className = "px-6 py-2.5 rounded-xl font-black text-[10px] uppercase transition-all bg-primary text-background shadow-lg shadow-primary/20";
+                tabHistory.className = "px-6 py-2.5 rounded-xl font-black text-[10px] uppercase transition-all text-slate-400 hover:text-white";
+            } else {
+                bookingView.classList.add('hidden');
+                historyView.classList.remove('hidden');
+                tabHistory.className = "px-6 py-2.5 rounded-xl font-black text-[10px] uppercase transition-all bg-primary text-background shadow-lg shadow-primary/20";
+                tabBooking.className = "px-6 py-2.5 rounded-xl font-black text-[10px] uppercase transition-all text-slate-400 hover:text-white";
+                loadInvoiceHistory();
+            }
+        }
+
+        function loadInvoiceHistory() {
+            fetch('api_facturas.php')
+                .then(r => r.json())
+                .then(data => {
+                    allInvoices = data;
+                    const tbody = document.getElementById('history-table-body');
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="px-10 py-20 text-center opacity-30 italic">No hay facturas registradas en el historial.</td></tr>';
+                        return;
+                    }
+                    tbody.innerHTML = data.map(inv => `
+                        <tr class="hover:bg-primary/5 transition-all group">
+                            <td class="px-10 py-8 font-black text-slate-500">#${inv.pago_id}</td>
+                            <td class="px-10 py-8">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-white">${inv.fecha}</span>
+                                    <span class="text-xs opacity-50 font-medium uppercase tracking-tighter">${inv.fecha_pago}</span>
+                                </div>
+                            </td>
+                            <td class="px-10 py-8">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-black text-[10px] text-primary">
+                                        ${inv.jugador_nombre.substring(0, 1).toUpperCase()}
+                                    </div>
+                                    <span class="font-bold">${inv.jugador_nombre}</span>
+                                </div>
+                            </td>
+                            <td class="px-10 py-8 opacity-70 font-semibold text-xs">${inv.cancha_nombre}</td>
+                            <td class="px-10 py-8 font-black text-primary">$${parseFloat(inv.monto).toFixed(2)}</td>
+                            <td class="px-10 py-8 text-right">
+                                <button onclick="generatePDF(${inv.pago_id})" class="text-primary hover:scale-110 transition-all">
+                                    <span class="material-symbols-outlined text-2xl">picture_as_pdf</span>
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                });
+        }
+
+        function generatePDF(invoiceId) {
+            const inv = allInvoices.find(i => i.pago_id == invoiceId);
+            if (!inv) return;
+
+            // Fill template
+            document.getElementById('pdf-id').innerText = inv.pago_id;
+            document.getElementById('pdf-cliente').innerText = inv.jugador_nombre;
+            document.getElementById('pdf-cedula').innerText = inv.jugador_cedula || 'N/A';
+            document.getElementById('pdf-cancha').innerText = inv.cancha_nombre;
+            document.getElementById('pdf-fecha').innerText = inv.fecha;
+            document.getElementById('pdf-horario').innerText = inv.hora_inicio.substring(0,5) + ' - ' + inv.hora_fin.substring(0,5);
+            document.getElementById('pdf-monto').innerText = parseFloat(inv.monto).toFixed(2);
+            document.getElementById('pdf-metodo').innerText = inv.metodo;
+            document.getElementById('pdf-ref').innerText = inv.referencia;
+            document.getElementById('pdf-total').innerText = parseFloat(inv.monto).toFixed(2);
+            document.getElementById('pdf-now').innerText = new Date().toLocaleString();
+
+            const element = document.getElementById('invoice-template');
+            element.classList.remove('hidden');
+            
+            const opt = {
+                margin: 0,
+                filename: `Factura_PadelPro_${inv.pago_id}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.classList.add('hidden');
+            });
         }
 
         document.getElementById('booking-form').addEventListener('submit', function(e) {

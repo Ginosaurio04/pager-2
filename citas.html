@@ -50,9 +50,16 @@
         .fc .fc-button-primary { background-color: rgba(89, 242, 13, 0.1); border-color: rgba(89, 242, 13, 0.2); color: #59f20d; font-weight: 800; text-transform: uppercase; font-size: 0.75rem; border-radius: 0.75rem; padding: 0.5rem 1rem; }
         .fc .fc-button-primary:hover { background-color: #59f20d; color: #0a1208; }
         .fc-event { border-radius: 6px; padding: 2px 4px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        
+        /* Toast Notification System */
+        .toast { position: fixed; top: 2rem; right: 2rem; padding: 1rem 2rem; border-radius: 1rem; color: white; font-weight: 700; transform: translateX(120%); transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999; }
+        .toast.show { transform: translateX(0); }
+        .toast-success { background: #59f20d; color: #0a1208; }
+        .toast-error { background: #ef4444; }
     </style>
 </head>
 <body class="bg-background text-slate-100 font-sans selection:bg-primary selection:text-background text-sm opacity-0 transition-opacity duration-300" id="main-body">
+    <div id="toast" class="toast"></div>
     <script>
         fetch('api_sesion.php')
             .then(r => r.json())
@@ -86,7 +93,7 @@
                 </a>
                 <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-primary/10" href="factura.html" data-nav="courts">
                     <span class="material-symbols-outlined group-hover:text-primary">payments</span>
-                    <span class="font-bold">Reservar Cancha</span>
+                    <span class="font-bold">Cancha a pagar</span>
                 </a>
                 <a class="flex items-center gap-4 px-5 py-4 rounded-xl transition-all group hover:bg-red-500/20 text-red-400 mt-10" href="logout.php">
                     <span class="material-symbols-outlined">logout</span>
@@ -145,8 +152,8 @@
                                 <span class="text-[10px] font-bold opacity-70">Confirmada</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-orange-500"></span>
-                                <span class="text-[10px] font-bold opacity-70">Pendiente</span>
+                                <span class="w-3 h-3 rounded-full bg-orange-500 animate-pulse"></span>
+                                <span class="text-[10px] font-bold opacity-70">En espera</span>
                             </div>
                         </div>
                     </div>
@@ -172,13 +179,85 @@
         </main>
     </div>
 
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 bg-background/80 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-md p-10 rounded-[2.5rem] shadow-2xl scale-95 transition-all duration-300" id="modal-content">
+            <h3 class="text-3xl font-black italic tracking-tighter mb-8 uppercase text-primary text-center">Procesar Pago</h3>
+            <form id="payment-modal-form" class="space-y-6">
+                <input type="hidden" id="modal-reserva-id" name="id">
+                <input type="hidden" name="action" value="pay">
+                <div class="space-y-4">
+                    <p class="text-[10px] font-black uppercase text-primary">Método de Pago</p>
+                    <select name="metodo_pago" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 text-sm focus:ring-1 focus:ring-primary outline-none transition-all appearance-none">
+                        <option value="Pago Móvil">Pago Móvil</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Tarjeta">Tarjeta de Débito</option>
+                    </select>
+                </div>
+                <div class="space-y-4">
+                    <p class="text-[10px] font-black uppercase text-primary">Referencia (Alfanumérico)</p>
+                    <input name="referencia" type="text" placeholder="Ej: REF12345" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 text-sm focus:ring-1 focus:ring-primary outline-none transition-all" required pattern="[A-Za-z0-9]+">
+                </div>
+                <div class="flex gap-4 pt-4">
+                    <button type="button" onclick="closePaymentModal()" class="flex-1 bg-white/5 text-white p-4 rounded-2xl font-black text-xs uppercase hover:bg-white/10 transition-all">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-primary text-background p-4 rounded-2xl font-black text-xs uppercase hover:scale-105 transition-all shadow-lg shadow-primary/20">Confirmar Pago</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Calendar Logic -->
     <script>
+        window.openPaymentModal = function(id) {
+            document.getElementById('modal-reserva-id').value = id;
+            const modal = document.getElementById('payment-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { document.getElementById('modal-content').classList.remove('scale-95'); }, 10);
+        }
+
+        window.closePaymentModal = function() {
+            document.getElementById('modal-content').classList.add('scale-95');
+            setTimeout(() => { document.getElementById('payment-modal').classList.add('hidden'); }, 300);
+        }
+
+        document.getElementById('payment-modal-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('api_operaciones_reserva.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                if(data.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Check for success URL param
-            if (new URLSearchParams(window.location.search).get('success')) {
-                document.getElementById('success-alert').style.display = 'flex';
-                setTimeout(() => { document.getElementById('success-alert').style.opacity = '0'; }, 3000);
+            // --- SISTEMA DE NOTIFICACIONES PROFESSIONALES ---
+            function showNotification(message, type = 'success') {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = `toast show toast-${type}`;
+                setTimeout(() => { toast.classList.remove('show'); }, 4000);
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('success')) {
+                showNotification('¡Reserva realizada con éxito!');
+            }
+            if (urlParams.get('error')) {
+                const error = urlParams.get('error');
+                if (error === 'occupied') {
+                    showNotification('ERROR: La cancha ya está ocupada para este bloque.', 'error');
+                } else if (error === 'incomplete') {
+                    showNotification('ERROR: Información incompleta.', 'error');
+                }
             }
 
             // Navigation Highlight
@@ -208,8 +287,11 @@
                             </td>
                             <td class="px-10 py-8 opacity-70 font-semibold">${res.cancha}</td>
                             <td class="px-10 py-8 text-xs font-medium">${res.fecha} <span class="opacity-40 ml-2">(${res.hora.substring(0, 5)})</span></td>
-                            <td class="px-10 py-8 text-right font-black italic text-xs uppercase tracking-widest ${res.estado === 'Confirmada' ? 'text-primary' : (res.estado === 'Finalizada' ? 'text-slate-500' : 'text-orange-500')}">${res.estado}</td>
-                            <td class="px-10 py-8 text-right">
+                            <td class="px-10 py-8 text-right font-black italic text-xs uppercase tracking-widest ${res.estado === 'Confirmada' ? 'text-primary' : (res.estado === 'Finalizada' ? 'text-slate-500' : (res.estado === 'Cancelada' ? 'text-red-500' : 'text-orange-500'))}">${res.estado === 'Pendiente' ? 'En espera' : res.estado}</td>
+                            <td class="px-10 py-8 text-right flex justify-end gap-2">
+                                ${res.pago === 'Por Pagar' && res.estado !== 'Cancelada' && res.estado !== 'Finalizada' ? `
+                                    <button onclick="openPaymentModal(${res.id})" class="bg-primary text-background px-4 py-2 rounded-lg text-[10px] font-black uppercase hover:scale-110 transition-all shadow-lg shadow-primary/20">Pagar</button>
+                                ` : ''}
                                 ${res.can_cancel && res.estado !== 'Cancelada' && res.estado !== 'Finalizada' ? `
                                     <button onclick="performAction(${res.id}, 'cancel')" class="bg-red-500/10 text-red-500 px-4 py-2 rounded-lg text-[10px] font-black uppercase hover:bg-red-500 hover:text-white transition-all">Cancelar</button>
                                 ` : '-'}
